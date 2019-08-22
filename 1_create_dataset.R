@@ -56,12 +56,14 @@ for (ii in 1:212){
   
   remove(data_name_isot, data_name_prec, data_name_temp)
   
+  remove(data_isot)
+  remove(data_prec)
+  remove(data_temp)
+  
 } 
 remove(ii)
 
-remove(data_isot)
-remove(data_prec)
-remove(data_temp)
+
 
 ##3) Data-Structure##############################
 
@@ -142,4 +144,5 @@ for (ii in (1:212)){
 remove(yearly_time_start, yearly_temp_mean, yearly_prec_mean, yearly_isot_mean)
 
 remove(ii)
+remove(jj)
 

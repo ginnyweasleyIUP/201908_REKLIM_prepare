@@ -40,9 +40,11 @@ for (ii in 1:212){
   data_reg_prec_isot_alpha[ii]   = Reg3$coefficients[[2]]
   data_reg_prec_isot_beta[ii]    = Reg3$coefficients[[1]]
   data_reg_prec_isot_rsqared[ii] = summary(Reg3)$r.squared
+  
+  remove(Reg1, Reg2, Reg3)
 }
 
-remove(Reg1, Reg2, Reg3)
+
 
 CAVES$reg_data$temp_prec_alpha = data_reg_temp_prec_alpha
 CAVES$reg_data$temp_prec_beta  = data_reg_temp_prec_beta
@@ -92,9 +94,10 @@ for (ii in 1:212){
   data_corr_prec_isot[ii] = Cor3$estimate[[1]]
   data_corr_prec_isot_p[ii] = Cor3$p.value
   
+  remove(Cor1, Cor2, Cor3)
 }
 
-remove(Cor1, Cor2, Cor3)
+
 
 CAVES$corr_data$temp_prec = data_corr_temp_prec
 CAVES$corr_data$temp_prec_p = data_corr_temp_prec_p
@@ -109,7 +112,7 @@ remove(data_corr_temp_prec,
        data_corr_temp_isot_p,
        data_corr_prec_isot,
        data_corr_prec_isot_p)
-remove(ii, jj)
+remove(ii)
 remove(pos_start, pos_stop)
 
 #################################################

@@ -75,7 +75,7 @@ sample_final <- site_min50 %>% filter(entity_id %in% site_period$entity_id)
 
 
 remove(dating_tb_2, dating_tb_3, sample_min50, sample_min50_data, site_min50, site_period)
-
+setwd("/home/ginnyweasley/Dokumente/01_Promotion/07_R_Code/201908_REKLIM_prepare/")
 
 
 
