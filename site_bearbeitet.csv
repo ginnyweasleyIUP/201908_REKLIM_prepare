@@ -1,0 +1,213 @@
+site_id,site_name,latitude,longitude,elevation,geology,rock_age,monitoring,Land,lat_start,lat_stop,long_start,long_stop
+1,Bittoo cave,30.7903,77.7764,3000,limestone,Pleistocene,yes,Indien,30,31,77,78
+2,Kesang cave,42.87,81.75,2000,unknown,Pleistocene,no,China,42,43,81,82
+3,Paraiso cave,-4.0667,-55.45,60,limestone,Carboniferous,yes,Brasilien,-4,-5,-55,-56
+4,Villars cave,45.43,0.78,175,limestone,Jurassic,yes,Frankreich,45,46,0,1
+5,Yangkou cave,29.0333,107.1833,2140,limestone,Permian,yes,China,29,30,107,108
+6,Hulu cave,32.5,119.17,90,unknown,unknown,unknown,China,32,33,119,120
+7,Cold Air cave,-24,29.1833,1420,dolomite,Precambrian,yes,Südafrika,-24,-24,29,30
+8,Lancaster Hole,54.2209,-2.5168,294,limestone,Carboniferous,yes,England,54,55,-2,-3
+9,Tonnel’naya cave,38.4,67.23,3226,unknown,Pleistocene,no,Usbekistan,38,39,67,68
+10,Jaraguá cave,-21.083,-56.583,570,limestone,unknown,yes,Brasilien,-21,-22,-56,-57
+11,Jeita cave,33.95,35.65,100,limestone,Pleistocene,no,Libanon,33,34,35,36
+12,Mawmluh cave,25.2622,91.8817,1160,limestone,Eocene,yes,Indien,25,26,91,92
+13,Ball Gown cave,-17.3,124.1,100,limestone,Devonian,no,Australien,-17,-18,124,125
+14,Lehman caves,39.01,-114.2199,2080,limestone,Cambrian,yes,USA-Nevada,39,40,-114,-115
+15,Baschg cave,47.2501,9.6667,780,limestone,Cretaceous,no,Österreich (Feldkirch),47,48,9,10
+16,Han-sur-Lesse cave,50.1164,5.1884,180,limestone,Devonian,no,Belgien,50,51,5,6
+17,Huangye cave,33.5833,105.1167,1650,unknown,unknown,no,China,33,34,105,106
+18,Abissal cave,-5.6,-37.733,100,limestone,unknown,no,Brasilien,-5,-6,-37,-38
+19,Kanaan cave,33.9069,35.6069,98,limestone,Jurassic,yes,Libanon,33,34,35,36
+20,Secret cave,4.0848,114.8503,250,limestone,unknown,unknown,Malaysia,4,5,114,115
+21,Uamh an Tartair,58.14,4.93,220,dolomite,Ordovician,yes,Nodrsee???,58,59,4,5
+22,RukieSSa cave,8.6036,40.3772,1618,limestone,Jurassic,yes,Äthiopien,8,9,40,41
+23,Lapa grande cave,-14.42,-44.366,590,limestone,Precambrian,no,Brasilien,-14,-15,-44,-45
+24,Lapa sem fim cave,-16.1503,-44.6281,341,limestone,Precambrian,yes,Brasilien,-16,-17,-44,-45
+25,Palestina cave,-5.92,-77.35,870,limestone,Triassic,yes,Peru,-5,-6,-77,-78
+26,Okshola cave,67,15,165,marble,unknown,no,Norwegen,67,67,15,15
+27,Tamboril cave,-16,-47,200,dolomite,Precambrian,yes,Brasilien,-16,-16,-47,-47
+28,Valmiki cave ,15.15,77.8167,420,dolomite,Precambrian,no,Indien,15,16,77,78
+29,Mairs cave,-32.16,138.83,475,limestone,Cambrian,no,Australien,-32,-33,138,139
+30,Lobatse cave,-25.21,25.68,1200,dolomite,unknown,no,Botswana,-25,-26,25,26
+31,Abaliget cave,46.13,18.12,209,limestone,Triassic,yes,Ungarn,46,47,18,19
+32,Anjokipoty cave,-15.5784,46.7344,NULL,limestone,unknown,no,Madagaskar,-15,-16,46,47
+33,Bero cave,8.4241,40.3073,1363,limestone,Jurassic,yes,Äthiopien,8,9,40,41
+34,Cueva del Diablo,18.192,-99.921,1030,unknown,Cretaceous,no,Mexiko,18,19,-99,-100
+35,Curupira cave,-15.2002,-56.7839,420,limestone,unknown,no,Brasilien,-15,-16,-56,-57
+36,Dayu cave,33.133,106.3,870,dolomite,Precambrian,no,China,33,34,106,107
+37,DeSoto caverns,33.3722,-86.3667,150,dolomite,Ordovician,unknown,Antarktis,33,34,-86,-87
+38,Diva cave,-12.3667,-41.5667,680,limestone,unknown,no,Brasilien,-12,-13,-41,-42
+39,Dongge cave,25.28,108.08,680,unknown,Pleistocene,no,China,25,26,108,109
+40,Excentrica cave,37.1,-7.77,100,limestone,Cretaceous,yes,Portugal,37,38,-7,-8
+41,Fukugaguchi cave,36.9917,137.8,170,limestone,Permian,yes,Japan,36,37,137,138
+42,Ifoulki cave,30.708,-9.3275,1250,limestone,unknown,no,Marokko,30,31,-9,-10
+43,Kalakot cave,33.2219,74.4258,826,limestone,Precambrian,no,Indien,33,34,74,75
+44,Kapsia cave,37.6233,22.3539,700,limestone,Triassic,yes,Griechenland,37,38,22,23
+45,Kulishu cave,39.68,115.65,610,dolomite,Precambrian,no,China,39,40,115,116
+46,Labyrintgrottan cave,66.06,14.68,730,limestone,Ordovician,no,Schweden,66,67,14,15
+47,Larshullet cave,66,14,400,marble,unknown,no,Norwegen,66,66,14,14
+48,Leviathan cave,37.89,-115.58,2400,limestone,Devonian,yes,USA – Nevada,37,38,-115,-116
+49,McLean's cave,38.07,-120.42,300,limestone,Triassic,no,USA – Kalifornien,38,39,-120,-121
+50,Moaning cave,38.0717,-120.4655,520,limestone,Triassic,no,USA – Kalifornien,38,39,-120,-121
+51,Natural Bridge caverns,29.69,-98.34,306,limestone,Cretaceous,yes,USA – Texas,29,30,-98,-99
+52,Pau d'Alho cave,-15.2055,-56.8,340,limestone,unknown,no,Brasilien,-15,-16,-56,-57
+53,Pippikin Pot cave,54.2143,-2.5123,320,limestone,Carboniferous,yes,England,54,55,-2,-3
+54,Sahiya cave,30.6,77.8667,1190,unknown,unknown,no,Indien,30,31,77,78
+55,Sieben Hengste cave,46.75,7.81,1955,limestone,Cretaceous,unknown,Schweiz,46,47,7,8
+56,Skala Marion cave,40.6387,24.5144,41,limestone,Miocene,unknown,Griechenland,40,41,24,25
+57,Soylegrotta cave,66,14,280,marble,unknown,yes,Norwegen,66,66,14,14
+58,Spannagel cave,47.08,11.67,2310,marble,Jurassic,no,Österreich,47,48,11,12
+59,Suozi cave,32.43,107.17,700,limestone,Permian,no,China,32,33,107,108
+60,Taurius cave,-15.5333,167.0167,230,unknown,unknown,no,Vanuatu,-15,-16,167,168
+61,Timta cave,29.8381,82.0336,1900,unknown,unknown,no,Nepal,29,30,82,83
+62,Torrinha cave,-12.3667,-41.5667,680,limestone,unknown,unknown,Brasilien,-12,-13,-41,-42
+63,Tzabnah cave,20.73,-89.716,20,unknown,unknown,unknown,Mexiko,20,21,-89,-90
+64,Wah Shikhar cave,25.25,91.8667,1290,unknown,unknown,no,Indien,25,26,91,92
+65,Whiterock cave,4.15,114.86,NULL,limestone,unknown,unknown,Malaysia,4,5,114,115
+66,White Scar cave,54.1656,-2.4419,255,limestone,Carboniferous,yes,UK,54,55,-2,-3
+67,Clearwater/Wind caves connection,4.1,114.83,NULL,limestone,unknown,unknown,Malaysia,4,5,114,115
+68,Jerusalem west cave,31.7833,35.15,700,dolomite,Cretaceous,unknown,Israel,31,32,35,36
+69,Xinglong cave,40.5,117.5,710,dolomite,Precambrian,yes,China,40,41,117,118
+70,Abaco Island cave,26.23,-77.16,-45,limestone,Pleistocene,no,Bahamas,26,27,-77,-78
+71,Baradla cave,48.4667,20.5,375,limestone,Triassic,yes,Ungarn,48,49,20,21
+72,Ascunsa cave,45,22.6,1050,limestone,Cretaceous,yes,Rumänien,45,45,22,23
+73,Bourgeois–Delaunay cave,45.6678,0.5133,100,limestone,Jurassic,no,Frankreich,45,46,0,1
+74,Cango cave,-33.3925,22.2147,NULL,limestone,Precambrian,no,Südafrika,-33,-34,22,23
+75,Cave Without a Name,29.8852,-98.6208,377,limestone,Cretaceous,yes,Texas,29,30,-98,-99
+76,Ceremosnja cave,44.4,21.65,530,limestone,Cretaceous,yes,Serbien,44,45,21,22
+77,Chauvet cave,44.23,4.26,240,limestone,Cretaceous,yes,Frankreich,44,45,4,5
+78,Chilibrillo cave,9.1741,-79.6164,60,unknown,unknown,no,Panama,9,10,-79,-80
+79,Dim cave,36.534,32.1056,232,limestone,Permian,no,Türkei,36,37,32,33
+80,Furong cave,29.2289,107.9036,480,dolomite,Cambrian,yes,China,29,30,107,108
+81,Gueldaman cave,36.4333,4.5667,507,limestone,Jurassic,no,Algerien,36,37,4,5
+82,Hollywood cave,-41.95,171.4667,130,unknown,unknown,no,Neuseeland,-41,-42,171,172
+83,La Mine cave,36.03,9.68,975,limestone,Cretaceous,no,Tunesien,36,37,9,10
+84,Leany cave,47.7,18.84,420,limestone,Triassic,no,Ungarn,47,48,18,19
+85,Macal Chasm,16.883,-89.108,530,limestone,Cretaceous,unknown,Belize,16,17,-89,-90
+86,Modric cave,44.2568,15.5372,32,limestone,Cretaceous,yes,Kroatien,44,45,15,16
+87,Pindal cave,43.4,-4.53,24,limestone,Carboniferous,yes,Spanien,43,44,-4,-5
+88,Postojna cave,45.77,14.2,529,limestone,Cretaceous,yes,Slowenien,45,46,14,15
+89,New St Michael's cave,36.1261,-5.3455,325,limestone,Jurassic,yes,Gibraltar,36,37,-5,-6
+90,Trio cave,46.11,18.15,275,limestone,Triassic,no,Ungarn,46,47,18,19
+91,Ursilor cave,46.5537,22.5695,482,limestone,Jurassic,unknown,Rumänien,46,47,22,23
+92,Bir-Uja cave,40.4833,72.5833,1435,limestone,Devonian,yes,Kirgisistan,40,41,72,73
+93,Green Cathedral cave,4.2333,114.925,NULL,limestone,unknown,unknown,Malaysia,4,5,114,115
+94,Anjohibe cave,-15.53,46.88,131,mixed,Eocene,no,Madagaskar,-15,-16,46,47
+95,Brown's cave,22.8894,-82.5186,25,limestone,Eocene,no,Kuba,22,23,-82,-83
+96,Brown's Folly mine,51.38,-2.37,150,limestone,Jurassic,yes,UK,51,52,-2,-3
+97,Bue Marino cave,40.2467,9.6228,0,limestone,Jurassic,unknown,Italien,40,41,9,10
+98,Crag cave,52.25,-9.43,60,limestone,Carboniferous,yes,Irland,52,53,-9,-10
+99,Dante cave,-19.4,17.8833,NULL,dolomite,unknown,unknown,Namibia,-19,-20,17,18
+100,Katerloch cave,47.0833,15.55,900,limestone,Devonian,yes,Österreich,47,48,15,16
+101,Klapferloch cave,46.95,10.55,1140,mixed,Cretaceous,yes,Österreich,46,47,10,11
+102,Korallgrottan cave,64.88,14,540,limestone,Precambrian,yes,Norwegen,64,65,14,14
+103,Lapa Doce cave,-12.3667,-41.5667,680,limestone,unknown,no,Brasilien,-12,-13,-41,-42
+104,Liang Luar cave,-8.53,120.43,550,limestone,Miocene,no,Indonesien,-8,-9,120,121
+105,Schneckenloch cave,47.4333,9.8667,1285,limestone,Cretaceous,unknown,Österreich,47,48,9,10
+106,Seso cave,42.46,0.04,794,limestone,Eocene,yes,Spanien,42,43,0,1
+107,Yok Balum cave,16.2086,-89.0735,336,limestone,Cretaceous,yes,Belize,16,17,-89,-90
+108,Clamouse cave,43.71,3.55,110,mixed,Jurassic,yes,Frankreich,43,44,3,4
+109,Molinos cave,40.7925,-0.4492,1050,limestone,Cretaceous,yes,Spanien,40,41,0,-1
+110,Ma'ale Efrayim cave,32.066,35.3952,250,dolomite,Cretaceous,unknown,West-Jordanland,32,33,35,36
+111,Rainha cave,-5.6,-37.733,100,limestone,unknown,unknown,Brasilien,-5,-6,-37,-38
+112,Xinya cave,30.75,109.47,1250,limestone,Triassic,no,China,30,31,109,110
+113,Paixão cave,-12.6182,-41.0184,NULL,limestone,Precambrian,yes,Brasilien,-12,-13,-41,-42
+114,Achere cave,8.6036,40.3729,1534,limestone,Jurassic,yes,Äthiopien,8,9,40,41
+115,Hölloch im Mahdtal,47.3781,10.1506,1240,limestone,Cretaceous,yes,Deutschland,47,48,10,11
+116,Bukit Assam cave,4.03,114.8,150,unknown,unknown,unknown,Malaysia,4,5,114,115
+117,Bunker cave,51.3675,7.6647,184,limestone,Devonian,yes,Deutschland,51,52,7,8
+118,Clearwater cave,4.1,114.8333,120,limestone,unknown,yes,Malaysia,4,5,114,115
+119,Cueva de Asiul,43.32,-3.59,285,unknown,unknown,unknown,Spanien,43,44,-3,-4
+120,Ejulve cave,40.45,-0.35,1240,mixed,Cretaceous,yes,Spanien,40,41,0,-1
+121,Entrische Kirche cave,47.16,13.15,2119,mixed,Jurassic,no,Österreich,47,48,13,14
+122,Heshang cave,30.45,110.4167,294,dolomite,Cambrian,no,China,30,31,110,111
+123,Milchbach cave,46.6167,8.083,1840,limestone,Jurassic,yes,Schweiz,46,47,8,9
+124,Pinnacle cave,35.97,-115.5,1792,limestone,Devonian,no,USA – Nevada,35,36,-115,-116
+125,Schafsloch cave ,47.2333,9.3833,1890,limestone,Cretaceous,unknown,Schweiz,47,48,9,10
+126,Tityana cave,30.6419,77.6521,1470,limestone,Precambrian,no,Indien,30,31,77,78
+127,Xiaobailong cave,24.2,103.35,1500,unknown,unknown,no,China,24,25,103,104
+128,Buckeye creek,37.9825,-79.5894,600,limestone,unknown,unknown,USA – Virginia,37,38,-79,-80
+129,Grotta di Carburangeli,38.1671,13.1615,22,limestone,Pleistocene,yes,Italien,38,39,13,14
+130,Dandak cave,19,82,400,unknown,unknown,no,Indien,19,19,82,82
+131,Grotta di Ernesto,45.9667,11.65,1167,limestone,Jurassic,yes,Italien,45,46,11,12
+132,Kleegruben cave,47.08,11.67,2165,marble,Jurassic,yes,Österreich,47,48,11,12
+133,Buca della Renella,44.08,10.21,300,dolomite,Triassic,yes,Italien,44,45,10,11
+134,Cave of the Bells,31.75,-110.75,NULL,unknown,unknown,yes,USA – Arizona,31,32,-110,-111
+135,Grotte de Piste,33.84,-4.09,1260,unknown,Holocene,unknown,Marokko,33,34,-4,-5
+136,Juxtlahuaca cave,17.4,-99.2,934,limestone,Cretaceous,yes,Mexiko,17,18,-99,-100
+137,Kinderlinskaya cave,54.15,56.85,240,limestone,Devonian,yes,Russland,54,55,56,57
+138,Moomi cave,12.5,54,400,limestone,unknown,no,Jemen,12,13,54,54
+139,Oregon caves national monument,42.0981,-123.4072,1300,marble,Triassic,yes,USA – Oregon,42,43,-123,-124
+140,Sanbao cave,31.667,110.433,1900,limestone,Pleistocene,no,China,31,32,110,111
+141,Sofular cave,41.42,31.93,700,unknown,unknown,unknown,Türkei,41,42,31,32
+142,Tianmen,30.9167,90.0667,4800,unknown,unknown,no,China,30,31,90,91
+143,Cova da Arcoia,42.61,-7.09,1240,unknown,unknown,no,Spanien,42,43,-7,-8
+144,Botuverá,-27.2247,-49.1569,180,limestone,Precambrian,yes,Brasilien,-27,-28,-49,-50
+145,Antro del Corchia,43.98,10.22,840,mixed,unknown,unknown,Italien,43,44,10,11
+146,Gunung-buda cave (snail shell cave),4.033,114.8,150,limestone,Miocene,yes,Malaysia,4,5,114,115
+147,Fort Stanton cave,33.5067,-105.4433,1864,unknown,unknown,unknown,USA – New Mexico,33,34,-105,-106
+148,Buffalo cave,-24.1428,29.177,1140,dolomite,Precambrian,no,Südafrika,-24,-25,29,30
+149,Dongge cave,25.28,108.08,680,unknown,Pleistocene,no,China,25,26,108,109
+150,Exhaleair cave,-41.2833,172.633,685,marble,unknown,no,Neuseeland,-41,-42,172,173
+151,Guillotine cave,-42.3108,172.2178,740,unknown,unknown,unknown,Neuseeland,-42,-43,172,173
+152,Hoti cave,23.0833,57.35,800,unknown,unknown,no,Oman,23,24,57,58
+153,Jhumar cave,18.8667,81.8667,600,unknown,unknown,yes,Indien,18,19,81,82
+154,Jiuxian cave,33.5667,109.1,1495,limestone,unknown,no,China,33,34,109,110
+155,KNI-51 cave,-15.18,128.37,100,limestone,Devonian,no,Australien,-15,-16,128,129
+156,Mavri Trypa cave,36.736,21.7596,70,limestone,Palaeocene,no,Griechenland,36,37,21,22
+157,Munagamanu cave,15.15,77.92,475,unknown,unknown,no,Indien,15,16,77,78
+158,Nettlebed cave,-41.25,172.633,390,marble,unknown,no,Neuseeland,-41,-42,172,173
+159,Qunf cave,17.1667,54.3,650,unknown,unknown,no,Oman,17,18,54,55
+160,Soreq cave,31.7558,35.0224,400,dolomite,Cretaceous,yes,Israel,31,32,35,36
+161,Te Anau Fiordland,-45.28,167.7,320,unknown,unknown,unknown,Neuseeland,-45,-46,167,168
+162,Calcite cave,-46.0172,167.7431,NULL,limestone,Miocene,unknown,Neuseeland,-46,-47,167,168
+163,Gardener's Gut,-37.7394,175.1033,120,unknown,unknown,unknown,Neuseeland,-37,-38,175,176
+164,Max's cave,-37.7394,175.1033,325,unknown,unknown,unknown,Neuseeland,-37,-38,175,176
+165,Ruakuri cave,-38.2667,175.0667,80,unknown,unknown,unknown,Neuseeland,-38,-39,175,176
+166,Te Reinga cave,-38.82,177.52,NULL,unknown,unknown,unknown,Neuseeland,-38,-39,177,178
+167,Waiau cave,-46,167.73,100,unknown,unknown,unknown,Neuseeland,-46,-46,167,168
+168,Wazpretti cave,-42.3108,171.4,100,unknown,unknown,unknown,Neuseeland,-42,-43,171,172
+169,Doubtful Xanadu,-45.3735,167.0476,960,marble,unknown,unknown,Neuseeland,-45,-46,167,168
+170,Defore cave,17.1667,54.0833,150,limestone,unknown,no,Oman,17,18,54,55
+171,Devils Hole,36.4254,-116.2915,719,unknown,unknown,unknown,USA – Nevada,36,37,-116,-117
+172,Wolkberg cave,-24.1,29.88,1450,dolomite,unknown,no,Südafrika,-24,-25,29,30
+173,Perdida cave,18,-67,350,limestone,Oligocene,yes,Puerto Rico,18,18,-67,-67
+174,Zhuliuping cave,26.0167,104.095,1217,limestone,Triassic,unknown,China,26,27,104,105
+175,Yaoba Don cave,28.8,109.83,420,limestone,Cambrian,unknown,China,109,110,420,420
+176,Qingtian,31.3333,110.3667,1630,limestone,Holocene,no,China,110,111,1630,1630
+177,Santo Tomas cave,22.55,-83.84,170,mixed,Jurassic,yes,Kuba,-83,-84,170,170
+178,Yamen,25.4833,107.9,570,unknown,unknown,unknown,China,107,108,570,570
+179,Closani cave,45.1,22.8,433,limestone,Jurassic,yes,Rumänien,22,23,433,433
+180,Chillagoe cave,-17.2,144.6,489,limestone,Devonian,no,Australien,144,145,489,489
+181,Forestry cave,-9.489,159.974,200,unknown,unknown,no,Salomonen,159,160,200,200
+182,Kotumsar cave,19,82,32,unknown,Precambrian,no,Indien,82,82,32,32
+183,Dos Anas cave,22.38,-83.97,120,mixed,Jurassic,yes,Kuba,-83,-84,120,120
+184,Cape range,-22.1,114,100,unknown,unknown,no,Australien,114,114,100,100
+185,Beatus cave,46.38,7.49,875,limestone,Cretaceous,unknown,Schweiz,7,8,875,875
+186,Bribin cave,-8.05,110.633,500,limestone,Miocene,no,Indonesien,110,111,500,500
+187,Cesare Battisti cave,46.08,11.02,1880,limestone,Jurassic,yes,Italien,11,12,1880,1880
+188,Chan Hol cave,20.16,-87.57,-8.5,limestone,Pliocene,no,Mexiko,-87,-88,-8,-9
+189,Chen Ha cave,16.6769,-89.0925,550,limestone,Cretaceous,no,Belize,-89,-90,550,550
+190,Cold Water cave,43.4678,-91.975,356,dolomite,Ordovician,unknown,"Iowa, USA",-91,-92,356,356
+191,Devil's Icebox cave,38.15,-92.05,250,limestone,Carboniferous,unknown,"Missouri, USA",-92,-93,250,250
+192,El Condor cave,-5.93,-77.3,860,unknown,unknown,unknown,Peru,-77,-78,860,860
+193,Frasassi cave system - Grotta Grande del Vento,43.4008,12.9619,257,limestone,Jurassic,yes,Italien,12,13,257,257
+194,Goshute cave,40.0333,-114.7833,2000,unknown,unknown,unknown,"Nevada, USA",-114,-115,2000,2000
+195,Harrison's cave,13.2,-59.6,300,limestone,Pleistocene,yes,Barbados,-59,-60,300,300
+196,Karaca cave,40.5443,39.4029,1536,limestone,Cretaceous,no,Türkei,39,40,1536,1536
+197,Klaus Cramer cave,47.26,9.52,1964,limestone,Cretaceous,unknown,Schweiz,9,10,1964,1964
+198,Lianhua,29.48,109.53,455,limestone,Ordovician,no,China,109,110,455,455
+199,Lynds cave,-41.58,146.25,300,limestone,Ordovician,no,Australien,146,147,300,300
+200,Minnetonka cave,56.5833,-119.65,2347,limestone,Palaeocene,yes,Kanada,-119,-120,2347,2347
+201,Moondyne cave,-34.27,115.08,100,limestone,Pleistocene,no,Australien,115,116,100,100
+202,Piani Eterni karst system,46.16,11.99,1893,mixed,Jurassic,no,Italien,11,12,1893,1893
+203,Poleva cave,44.7144,21.7469,390,limestone,Cretaceous,no,Rumänien,21,22,390,390
+204,Xibalba cave,16.5,-89,350,limestone,Cretaceous,unknown,Belize,-89,-89,350,350
+205,São Bernardo cave,-13.81,-46.35,631,unknown,unknown,yes,Brasilien,-46,-47,631,631
+206,São Matheus cave,-13.81,-46.35,631,unknown,unknown,no,Brasilien,-46,-47,631,631
+207,Shatuca cave,-5.7,-77.9,1960,limestone,Triassic,no,Peru,-77,-78,1960,1960
+208,Tangga cave,-0.36,100.76,600,mixed,Permian,no,Indonesien,100,101,600,600
+209,Uluu-Too cave,40.4,72.35,1490,limestone,Devonian,yes,Kirgisistan,72,73,1490,1490
+210,White moon cave,37,-122.183,170,marble,Permian,yes,"Kalifornien, USA",-122,-123,170,170
+211,Xiangshui cave,25.25,110.92,380,limestone,Devonian,unknown,China,110,111,380,380
+212,Peqiin cave,32.58,35.19,650,limestone,Cretaceous,unknown,Israel,35,36,650,650
