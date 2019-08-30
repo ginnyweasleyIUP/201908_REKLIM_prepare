@@ -29,10 +29,13 @@ CAVES$yearly_data$isot = fill_raw_NA_isot(1150)
 
 ##2) read in data from nc-files##################
 #Clear data for any NAs or any too high or too low values
+
+data_folder = "/home/ginnyweasley/Dokumente/01_Promotion/06_Daten/05_HadCM3/sisal_ncdata_xnapa/"
+
 for (ii in 1:212){
-  data_name_temp = paste("sisal_ncdata/xnapa_cave", ii, "_temp.nc", sep = "")
-  data_name_prec = paste("sisal_ncdata/xnapa_cave", ii, "_prec.nc", sep = "")
-  data_name_isot = paste("sisal_ncdata/xnapa_cave", ii, "_isot.nc", sep = "")
+  data_name_temp = paste(data_folder, "xnapa_cave", ii, "_temp.nc", sep = "")
+  data_name_prec = paste(data_folder, "xnapa_cave", ii, "_prec.nc", sep = "")
+  data_name_isot = paste(data_folder, "xnapa_cave", ii, "_isot.nc", sep = "")
   
   #time is extracted from temperature
   data_xnap_temp <- ncdf4::nc_open(data_name_temp)
@@ -61,8 +64,7 @@ for (ii in 1:212){
   remove(data_temp)
   
 } 
-remove(ii)
-
+remove(ii, data_folder)
 
 
 ##3) Data-Structure##############################

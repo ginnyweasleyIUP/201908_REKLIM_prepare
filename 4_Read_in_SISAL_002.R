@@ -49,7 +49,7 @@ sample_tb <- as.data.frame(data[4])
 # 1) filtere alle fie nicht C14 datiert sind oder laminations haben --> dann bleiben nur Ur/Th Datierungen übrig
 dating_tb_3 <- dating_tb_2 %>% filter(date_used == "yes" & date_type != c("C14", "Event; end of laminations", "Event; start of laminations"))
 
-# 2) aus sample ID, verwende nur die, die bei datib_tb_§ rausgekommen sind
+# 2) aus sample ID, verwende nur die, die bei dating_tb_3 rausgekommen sind
 #     filtere dann die, die mindestens ein Alter haben das jünger ist als 1100y. 
 #     Die werden sortiert nach entity_id und dann gezählt. Übrig sollen nur die bleiben, mit mehr als 50 Datierungen. 
 sample_min50 <- sample_tb %>% filter( entity_id %in% dating_tb_3$entity_id) %>%
@@ -68,13 +68,17 @@ site_period <- site_min50 %>% group_by(entity_id) %>%
   filter(min_corr_age < 0 &  max_corr_age > 1000) %>%
   mutate(period = max_corr_age -min_corr_age) %>% filter(period > 700)
 
-sites_used <- site_period[,1]$entity_id
+entities_used <- site_period[,1]$entity_id
 
 # 5) finale Tabelle (aus site_min_50 werden nochmal die entfernt, die weniger als 500 Jahre lange Messungen haben)
-sample_final <- site_min50 %>% filter(entity_id %in% site_period$entity_id) 
+sample_final <- site_min50 %>% filter(entity_id %in% site_period$entity_id)  %>% filter(interp_age < 1100)
 
+sites_used <- sample_final %>% group_by(site_id)%>% count(site_id)%>% select(site_id)# %>% arrange(site_id)
+sites_used <- sites_used[,1]$site_id
 
-remove(dating_tb_2, dating_tb_3, sample_min50, sample_min50_data, site_min50, site_period)
+sites_entities_used <- sample_final %>% count(site_id, entity_id)%>% select(site_id, entity_id)
+
+remove(dating_tb_2, dating_tb_3, sample_min50, sample_min50_data, site_period)
 setwd("/home/ginnyweasley/Dokumente/01_Promotion/07_R_Code/201908_REKLIM_prepare/")
 
 

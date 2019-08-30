@@ -62,6 +62,42 @@ for (ii in 1:212){
   DATA_pfusch$diff_var[ii] = DATA_pfusch$var_isot_sim[ii] - DATA_pfusch$var_isot_sisal[ii]
 }
 
+#################################################
+##Verwende nur last 1000 years+min50 sample######
+#################################################
+
+#verwende hierfür sample_final für Daten
+#verwende sites_entities_used für site-entity Tabelle
+
+tab_length = dim(sites_entities_used)[1]
+
+DATA_last1000 <-data.frame(
+  mean_isot_sim = numeric(tab_length),
+  mean_isot_sisal = numeric(tab_length),
+  diff_mean = numeric(tab_length),
+  var_isot_sim = numeric(tab_length),
+  var_isot_sisal = numeric(tab_length),
+  diff_var = numeric(tab_length)
+)
+
+for (ii in 1:tab_length){
+  site = sites_entities_used$site_id[ii]
+  entity = sites_entities_used$entity_id[ii]
+  #s286 <- sample_tb %>% filter(entity_id == 286)
+  #lines(s286$interp_age, movavg(s286$d18O_measurement,10), xlim=c(-49,1100), type = "l", col = "#B2182B", lwd = 2)
+  entity_data = sample_final %>% filter(entity_id == entity)
+  DATA_last1000$mean_isot_sisal[ii] = mean(entity_data$d18O_measurement)
+  DATA_last1000$var_isot_sisal[ii] = cov(entity_data$d18O_measurement, entity_data$d18O_measurement)
+  DATA_last1000$mean_isot_sim[ii] = mean(CAVES$yearly_data$isot[[site]])
+  DATA_last1000$var_isot_sim[ii] = cov(CAVES$yearly_data$isot[[site]],CAVES$yearly_data$isot[[site]])
+  
+  DATA_last1000$diff_mean[ii] <- DATA_last1000$mean_isot_sim[ii]-DATA_last1000$mean_isot_sisal[ii]
+  DATA_last1000$diff_var[ii] <- DATA_last1000$var_isot_sim[ii]/DATA_last1000$var_isot_sisal[ii]
+  remove(site,entity, entity_data)
+}
+
+
+
 
 #################################################
 ## NOW PLOT MAPS TO IT###########################
@@ -89,9 +125,9 @@ ocean_map <- readOGR(dsn ="Nat_Earth_Data/ne_10m_ocean.shp", verbose = FALSE)
 world_map <- map_data('world')
 
 MEAN_MAP <- data_frame(
-  value = DATA_pfusch$diff_mean,
-  x_lon = CAVES$site_info$longitude,
-  y_lat = CAVES$site_info$latitude
+  value = DATA_last1000$diff_mean,
+  x_lon = CAVES$site_info$longitude[sites_entities_used$site_id],
+  y_lat = CAVES$site_info$latitude[sites_entities_used$site_id]
 )
 
 plot <- ggplot() + geom_polygon(data = land_map, aes(x=long, y = lat, group = group),fill ="white", color = NA) + 
@@ -108,15 +144,15 @@ plot <- ggplot() + geom_polygon(data = land_map, aes(x=long, y = lat, group = gr
         axis.title.y = element_text(size=11),
         legend.text = element_text(size=11))
 
-plot %>% ggsave(filename = paste('map_mean_diff', 'png', sep = '.'), plot = ., path = 'Plots', 
+plot %>% ggsave(filename = paste('map_mean_diff_last1000', 'png', sep = '.'), plot = ., path = 'Plots', 
                 width = 15, height = 10, units = 'cm', dpi = 'print')
 
 #MAP 2: VAR DIFFERENCE###########################
 
 VAR_MAP <- data_frame(
-  value = DATA_pfusch$diff_var,
-  x_lon = CAVES$site_info$longitude,
-  y_lat = CAVES$site_info$latitude
+  value = DATA_last1000$diff_var,
+  x_lon = CAVES$site_info$longitude[sites_entities_used$site_id],
+  y_lat = CAVES$site_info$latitude[sites_entities_used$site_id]
 )
 
 plot <- ggplot() + geom_polygon(data = land_map, aes(x=long, y = lat, group = group),fill ="white", color = NA) + 
@@ -133,5 +169,5 @@ plot <- ggplot() + geom_polygon(data = land_map, aes(x=long, y = lat, group = gr
         axis.title.y = element_text(size=11),
         legend.text = element_text(size=11))
 
-plot %>% ggsave(filename = paste('map_var_diff', 'png', sep = '.'), plot = ., path = 'Plots', 
+plot %>% ggsave(filename = paste('map_var_diff_last1000', 'png', sep = '.'), plot = ., path = 'Plots', 
                 width = 15, height = 10, units = 'cm', dpi = 'print')
