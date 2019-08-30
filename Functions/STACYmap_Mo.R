@@ -11,6 +11,13 @@ library(viridisLite)
 
 # helpers
 title_and_axis <- function(){
+  #styles
+  
+  GLOBAL_FONT_FACE_TITLE <- 'bold'
+  GLOBAL_FONT_FACE_TEXT <- 'plain'
+  GLOBAL_FONT_SIZE <- 17
+  GLOBAL_FONT_FAMILY <- 'sans'
+  
   ax <- theme_bw() + 
     theme(title = element_text(face = GLOBAL_FONT_FACE_TITLE, size = GLOBAL_FONT_SIZE + 1, family = GLOBAL_FONT_FAMILY),
           text = element_text(face = GLOBAL_FONT_FACE_TEXT, size = GLOBAL_FONT_SIZE, family = GLOBAL_FONT_FAMILY), 
@@ -92,7 +99,7 @@ STACYmap <- function(gridlyr = NULL,
                      coastline = TRUE,
                      filledbg = FALSE,
                      bathymetry = FALSE,
-                     projection = CRS(as.character('+proj=robin +datum=WGS84')), #+proj=longlat +datum=WGS84
+                     projection = '+proj=robin +datum=WGS84', #+proj=longlat +datum=WGS84
                      graticules = TRUE, 
                      zoom = NULL, 
                      legend_names = list(grid = 'grid', pt = 'points'), 
@@ -126,9 +133,9 @@ STACYmap <- function(gridlyr = NULL,
   
   # TODO enable lapply -> option to pass multiple gridlyr, plgnlyr, ptlyr as a list
   # projections
-  if (class(projection) == 'character') {
-    projection <- CRS(projection)
-  }
+  #if (class(projection) == 'character') {
+  #  projection <- CRS(projection)
+  #}
   splcol <- FALSE; if (all(class(colorscheme) == 'list')) {splcol <- TRUE}
   if ((class(colorscheme) == 'list' & all(lapply(colorscheme[1:length(colorscheme)], length) == 1)) | (class(colorscheme) == 'character' & length(colorscheme) == 1)) {
     colorschemeo <- colorscheme
@@ -182,7 +189,7 @@ STACYmap <- function(gridlyr = NULL,
       gridlyr <- gridlyr %>% 
         prepg[[class(gridlyr)]](.) %>% 
         raster::rasterToPolygons() %>% 
-        spTransform(projection) %>%
+        spTransform(CRS(projection)) %>%
         as('SpatialPolygonsDataFrame') %>% 
         as('sf')
     }
@@ -253,7 +260,7 @@ STACYmap <- function(gridlyr = NULL,
   if (load_bathy) {
      bathy_data <- lapply(sort(c(200, seq(0, 10000, 1000))), function (x, L) {
       load_natural_earth_data(file = paste0('ne_10m_bathymetry_', L[[as.character(x)]], '_', x, '.shp')) %>% 
-        spTransform(., CRSobj = projection) %>% 
+        spTransform(., CRSobj = CRS(projection)) %>% 
         fortify(.)}, L = LETTERS[seq(1, 12, 1) %>% rev()] %>% 
         setNames(., c(200, seq(0, 10000, 1000)) %>% sort())) %>% 
       setNames(., sort(c(200, seq(0, 10000, 1000))))
@@ -262,7 +269,7 @@ STACYmap <- function(gridlyr = NULL,
   
   if (filledbg) {
     map_data <- load_natural_earth_data(file = 'ne_10m_land.shp') %>% 
-      spTransform(., CRSobj = projection) %>% 
+      spTransform(., CRSobj = CRS(projection)) %>% 
       fortify(.)
     
     if (bathymetry) {
@@ -331,7 +338,7 @@ STACYmap <- function(gridlyr = NULL,
     
     if (load_map) {
       map_data <- load_natural_earth_data(file = 'ne_10m_land.shp') %>% 
-        spTransform(., CRSobj = projection) %>% 
+        spTransform(., CRSobj = CRS(projection)) %>% 
         fortify(.)
       .STACYmap$map_data[[as.character(projection)]] <- map_data
     }
@@ -370,23 +377,24 @@ STACYmap <- function(gridlyr = NULL,
           panel.background = element_blank(),
           axis.title = element_blank(), 
           legend.position = 'bottom',
-          panel.grid = element_blank(), 
+          panel.grid = element_line(colour = "black", size = 0.1), 
           plot.background = element_blank(), 
           axis.ticks = element_blank()) # element_line(linetype = 'af', colour = 'grey50'))
   
   if (!graticules) {
     map_plot <- map_plot + 
       coord_sf(label_graticule = 'SW', label_axes = '--EN',
-               crs = projection,
+               crs = CRS(projection),
                datum = NA,
                xlim = {if (!is.null(xlim)) {xlim}},
                ylim = {if (!is.null(ylim)) {ylim}},#c(-0.63*1e7, 0.77*1e7),
                expand = F) + 
-      theme(axis.text = element_blank())
+      theme(axis.text = element_blank(),
+            panel.grid = element_blank())
   } else {
     map_plot <- map_plot  + 
       coord_sf(label_graticule = 'SW', label_axes = '--EN',
-               crs = projection,
+               crs = CRS(projection),
                xlim = xlim,#{if (!is.null(xlim)) {xlim}},
                ylim = ylim,#{if (!is.null(ylim)) {ylim}},#c(-0.63*1e7, 0.77*1e7),
                expand = F)
