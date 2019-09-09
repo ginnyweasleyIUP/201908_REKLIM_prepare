@@ -114,48 +114,12 @@ for (lon in 1:96){ #--> nachgeschaute Dimensionen...!
 remove(lon,lat,ii)
 remove(temp_raw, prec_raw, isot_raw)
 
-layer <- ogrListLayers("/home/ginnyweasley/Dokumente/01_Promotion/07_R_Code/naturalearth_10m_physical/ne_10m_coastline.shp")
-coastline_map <- readOGR(dsn ="/home/ginnyweasley/Dokumente/01_Promotion/07_R_Code/naturalearth_10m_physical/ne_10m_coastline.shp", verbose = FALSE, layer= layer)
-land_map <- readOGR(dsn ="/home/ginnyweasley/Dokumente/01_Promotion/07_R_Code/naturalearth_10m_physical/ne_10m_land.shp", verbose = FALSE)
-ocean_map <- readOGR(dsn ="/home/ginnyweasley/Dokumente/01_Promotion/07_R_Code/naturalearth_10m_physical/ne_10m_ocean.shp", verbose = FALSE) %>% fortify()
-remove(layer)
-
 plotting_ls_mask <- SIM_DATA_past1000$GLOBAL_STUFF$GLOBAL_ls_mask
 plotting_ls_mask[plotting_ls_mask == 0] <- NA
 plotting_temp_mask <- SIM_DATA_past1000$GLOBAL_DATA_MEAN$GLOBAL_DATA_TEMP_MEAN
 plotting_temp_mask[plotting_temp_mask> -38] <- 1
 plotting_temp_mask[plotting_temp_mask< -38] <- NA
 
-GLOBAL_MEAN_TEMP_MAP <- data.frame(
-  x_lon = rep(SIM_DATA_past1000$GLOBAL_STUFF$GLOBAL_lon_corrected, length(SIM_DATA_past1000$GLOBAL_STUFF$GLOBAL_lat_raw)),
-  y_lat = rep(SIM_DATA_past1000$GLOBAL_STUFF$GLOBAL_lat_raw, each = length(SIM_DATA_past1000$GLOBAL_STUFF$GLOBAL_lon_corrected)),
-  value = array(SIM_DATA_past1000$GLOBAL_DATA_MEAN$GLOBAL_DATA_TEMP_MEAN*plotting_ls_mask*plotting_temp_mask)
-)
-
-plot <- STACYmap(gridlyr = rbind(SIM_DATA_past1000$GLOBAL_DATA_MEAN$GLOBAL_DATA_TEMP_MEAN[49:96,1:73]*plotting_ls_mask[49:96,1:73]*plotting_temp_mask[49:96,1:73],SIM_DATA_past1000$GLOBAL_DATA_MEAN$GLOBAL_DATA_TEMP_MEAN[1:48,1:73]*plotting_ls_mask[1:48,1:73]*plotting_temp_mask[1:48,1:73]),
-                 #projection = "+proj=robin +lon_0=120",
-                 zoom = c(-180, -60, 180, 73),
-                 legend_names = list(grid = TeX("$T_{mean}")))
-
-
-
-# plot <- ggplot() +
-#   geom_tile(data = subset(GLOBAL_MEAN_TEMP_MAP, !is.na(value)), aes(x = x_lon, y = y_lat, fill = value), size = 1) +
-#   scale_fill_gradient2(midpoint = 0.5, low = "#053061", mid = "white", high = "#67001F", space = "Lab", name = TeX("$T_{mean}$")) +
-#   geom_polygon(data = land_map, aes(x = long, y = lat, group = group), size = 0.1, color = "black", fill = NA, alpha = 0.5) +
-#   ggtitle(TeX("Yearly local $T_{mean}$ for past 1000y"))+
-#   coord_fixed(1.3) + 
-#   xlab("")+ ylab("")+
-#   ylim(-60,80) +
-#   xlim(-170, 180) +
-#   theme(plot.title = element_text(size=12, face="bold", hjust = 0.5),
-#         axis.title.x = element_text(size=11),
-#         axis.title.y = element_text(size=11),
-#         legend.text = element_text(size=11))
-# 
-# 
-# plot %>% ggsave(filename = paste('Map_blabla', 'png', sep = '.'), plot = ., path = 'Plots', 
-#                 width = 15, height = 10, units = 'cm', dpi = 'print')
 
 #################################################
 ##CALCULATE CORRELATIONS ########################
@@ -186,8 +150,6 @@ for (lon in 1:96){
       SIM_DATA_past1000$GLOBAL_CORRELATION$CORR_PREC_ISOT_P[lon,lat] = NA
     }
     
-    
-    
   }
 }
 
@@ -198,36 +160,53 @@ for (lon in 1:96){
 #################################################
 
 #TODO : Insert plotting_mask with p-values!!!
-# AUsserdem finde raus, wierum der p-value richtig ist!!!
+
+# p muss kleiner als 0.05 damit significance passt!!!
 
 plotting_mask_tp <- SIM_DATA_past1000$GLOBAL_CORRELATION$CORR_TEMP_PREC_P
 plotting_mask_tp[plotting_mask_tp>0.1] = NA
 plotting_mask_tp[plotting_mask_tp<0.1] = 1
 
 plotting_mask_ti <- SIM_DATA_past1000$GLOBAL_CORRELATION$CORR_TEMP_ISOT_P
-plotting_mask_ti[plotting_mask_tp<0.1] = NA
-plotting_mask_ti[plotting_mask_tp>0.1] = 1
+plotting_mask_ti[plotting_mask_ti>0.1] = NA
+plotting_mask_ti[plotting_mask_ti<0.1] = 1
 
 plotting_mask_pi <- SIM_DATA_past1000$GLOBAL_CORRELATION$CORR_PREC_ISOT_P
-plotting_mask_pi[plotting_mask_tp>0.1] = NA
-plotting_mask_pi[plotting_mask_tp<0.1] = 1
+plotting_mask_pi[plotting_mask_pi>0.1] = NA
+plotting_mask_pi[plotting_mask_pi<0.1] = 1
+
+SITES_USED_MAP = data.frame(
+  x_lon = CAVES$site_info$longitude[sites_used],
+  y_lat = CAVES$site_info$latitude[sites_used],
+  cell_columns = numeric(length = length(sites_used))
+)
 
 
 plot_cor_tp <- STACYmap(gridlyr = rbind(SIM_DATA_past1000$GLOBAL_CORRELATION$CORR_TEMP_PREC[49:96,1:73]*plotting_ls_mask[49:96,1:73]*plotting_mask_tp[49:96,1:73],
                                         SIM_DATA_past1000$GLOBAL_CORRELATION$CORR_TEMP_PREC[1:48,1:73]*plotting_ls_mask[1:48,1:73]*plotting_mask_tp[1:48,1:73]),
-                 #projection = "+proj=robin +lon_0=120",
-                 zoom = c(-180, -60, 180, 73),
-                 legend_names = list(grid = TeX("Corr T-P")))
+                        ptlyr = SITES_USED_MAP,
+                        zoom = c(-180, -60, 180, 73),
+                        legend_names = list(grid = "Corr T-P"), 
+                        graticules = TRUE,
+                        centercolor = list(grid = "white", pt = "white")) +
+  ggtitle("Local Temp-Prec Correlation, p<0.1") +
+  theme(plot.title = element_text(h = 0.5))
 plot_cor_ti <- STACYmap(gridlyr = rbind(SIM_DATA_past1000$GLOBAL_CORRELATION$CORR_TEMP_ISOT[49:96,1:73]*plotting_ls_mask[49:96,1:73]*plotting_mask_ti[49:96,1:73],
                                         SIM_DATA_past1000$GLOBAL_CORRELATION$CORR_TEMP_ISOT[1:48,1:73]*plotting_ls_mask[1:48,1:73]*plotting_mask_ti[1:48,1:73]),
-                 #projection = "+proj=robin +lon_0=120",
-                 zoom = c(-180, -60, 180, 73),
-                 legend_names = list(grid = TeX("Corr T-I")))
+                        ptlyr = SITES_USED_MAP,
+                        zoom = c(-180, -60, 180, 73),
+                        legend_names = list(grid = "Corr T-I"),
+                        centercolor = list(grid = "white", pt = "white")) +
+  ggtitle("Local Temp-Isotopic Composition Correlation, p<0.1") +
+  theme(plot.title = element_text(h = 0.5))
 plot_cor_pi <- STACYmap(gridlyr = rbind(SIM_DATA_past1000$GLOBAL_CORRELATION$CORR_PREC_ISOT[49:96,1:73]*plotting_ls_mask[49:96,1:73]*plotting_mask_pi[49:96,1:73],
                                         SIM_DATA_past1000$GLOBAL_CORRELATION$CORR_PREC_ISOT[1:48,1:73]*plotting_ls_mask[1:48,1:73]*plotting_mask_pi[1:48,1:73]),
-                 #projection = "+proj=robin +lon_0=120",
-                 zoom = c(-180, -60, 180, 73),
-                 legend_names = list(grid = TeX("Corr P-I")))
+                        ptlyr = SITES_USED_MAP,
+                        zoom = c(-180, -60, 180, 73),
+                        legend_names = list(grid = "Corr P-I"),
+                        centercolor = list(grid = "white", pt = "white")) +
+  ggtitle("Local Prec-Isotopic Composition Correlation, p<0.1") +
+  theme(plot.title = element_text(h = 0.5))
 
 plot_cor_tp %>% ggsave(filename = paste('Map_Cor_Temp_Prec_p01', 'png', sep = '.'), plot = ., path = 'Plots', 
                 width = 15, height = 10, units = 'cm', dpi = 'print')
@@ -243,22 +222,53 @@ remove(plot_cor_pi, plot_cor_ti, plot_cor_tp)
 ##CALCULATE REGRESSIONS##########################
 #################################################
 
+#Regressionsanalyse macht eigentlich erst Sinn bei längeren Zeiträumen
+#bei einem Zeitraum von nur 1000 Jahren ändert sich nicht genug, als dass es eine 
+
 for (lon in 1:96){ #--> nachgeschaute Dimensionen...!
   for (lat in 1:73){
-    REG1 = lm(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_PREC_YEARLY[lon,lat,] ~ SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,lat,])
-    REG2 = lm(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon,lat,] ~ SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,lat,])
-    REG3 = lm(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon,lat,] ~ SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_PREC_YEARLY[lon,lat,])
+    if(!any(is.na(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,lat,])) & 
+       !any(is.infinite(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,lat,])) &
+       !any(is.na(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_PREC_YEARLY[lon,lat,])) & 
+       !any(is.infinite(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_PREC_YEARLY[lon,lat,]))){
+      REG1 = lm(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_PREC_YEARLY[lon,lat,] ~ SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,lat,])
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_PREC_alpha[lon,lat] = REG1$coefficients[[2]]
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_PREC_beta[lon,lat] = REG1$coefficients[[1]]
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_PREC_rsquared[lon,lat] = summary(REG1)$r.squared
+    }else{
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_PREC_alpha[lon,lat] = NA
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_PREC_beta[lon,lat] = NA
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_PREC_rsquared[lon,lat] = NA
+    }
     
-    SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_PREC_alpha = REG1$coefficients[[2]]
-    SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_PREC_beta = REG1$coefficients[[1]]
-    SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_PREC_rsquared = summary(REG1)$r.squared
-    SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_ISOT_alpha = REG2$coefficients[[2]]
-    SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_ISOT_beta = REG2$coefficients[[1]]
-    SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_ISOT_rsquared = summary(REG2)$r.squared
-    SIM_DATA_past1000$GLOBAL_REGRESSION$REG_PREC_ISOT_alpha = REG3$coefficients[[2]]
-    SIM_DATA_past1000$GLOBAL_REGRESSION$REG_PREC_ISOT_beta = REG3$coefficients[[1]]
-    SIM_DATA_past1000$GLOBAL_REGRESSION$REG_PREC_ISOT_rsquared = summary(REG3)$r.squared
+    if(!any(is.na(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon,lat,])) & 
+       !any(is.infinite(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon,lat,])) &
+       !any(is.na(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,lat,])) & 
+       !any(is.infinite(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,lat,]))){
+      REG2 = lm(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon,lat,] ~ SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,lat,])
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_ISOT_alpha[lon,lat] = REG2$coefficients[[2]]
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_ISOT_beta[lon,lat] = REG2$coefficients[[1]]
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_ISOT_rsquared[lon,lat]= summary(REG2)$r.squared
+    }else{
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_ISOT_alpha[lon,lat] = NA
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_ISOT_beta[lon,lat] = NA
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_ISOT_rsquared[lon,lat] = NA
+    }
     
+    
+    if(!any(is.na(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon,lat,])) & 
+       !any(is.infinite(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon,lat,])) &
+       !any(is.na(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_PREC_YEARLY[lon,lat,])) &
+       !any(is.infinite(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_PREC_YEARLY[lon,lat,]))){
+      REG3 = lm(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon,lat,] ~ SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_PREC_YEARLY[lon,lat,])
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_PREC_ISOT_alpha[lon,lat] = REG3$coefficients[[2]]
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_PREC_ISOT_beta[lon,lat] = REG3$coefficients[[1]]
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_PREC_ISOT_rsquared[lon,lat] = summary(REG3)$r.squared
+    }else{
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_PREC_ISOT_alpha[lon,lat] = NA
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_PREC_ISOT_beta[lon,lat] = NA
+      SIM_DATA_past1000$GLOBAL_REGRESSION$REG_PREC_ISOT_rsquared[lon,lat] = NA
+    }
   }
 }
 
@@ -266,4 +276,141 @@ for (lon in 1:96){ #--> nachgeschaute Dimensionen...!
 #################################################
 ##PLOT REGRESSIONS ##############################
 #################################################
+
+plotting_mask_tp <- SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_PREC_rsquared
+plotting_mask_tp[plotting_mask_tp<0.5] = NA
+plotting_mask_tp[plotting_mask_tp>0.5] = 1
+
+plotting_mask_ti <- SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_ISOT_rsquared
+plotting_mask_ti[plotting_mask_ti<0.5] = NA
+plotting_mask_ti[plotting_mask_ti>0.5] = 1
+
+plotting_mask_pi <- SIM_DATA_past1000$GLOBAL_REGRESSION$REG_PREC_ISOT_rsquared
+plotting_mask_pi[plotting_mask_pi<0.5] = NA
+plotting_mask_pi[plotting_mask_pi>0.5] = 1
+
+SITES_USED_MAP = data.frame(
+  x_lon = CAVES$site_info$longitude[sites_used],
+  y_lat = CAVES$site_info$latitude[sites_used],
+  cell_columns = numeric(length = length(sites_used))
+)
+
+
+plot_reg_tp <- STACYmap(gridlyr = rbind(SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_PREC_alpha[49:96,1:73]*plotting_ls_mask[49:96,1:73]*plotting_mask_tp[49:96,1:73],
+                                        SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_PREC_alpha[1:48,1:73]*plotting_ls_mask[1:48,1:73]*plotting_mask_tp[1:48,1:73]),
+                        ptlyr = SITES_USED_MAP,
+                        zoom = c(-180, -60, 180, 73),
+                        legend_names = list(grid = "Corr T-P"), 
+                        graticules = TRUE,
+                        centercolor = list(grid = "white", pt = "white")) +
+  ggtitle("Local Temp-Prec Regression, r2>0.5") +
+  theme(plot.title = element_text(h = 0.5))
+plot_reg_ti <- STACYmap(gridlyr = rbind(SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_ISOT_alpha[49:96,1:73]*plotting_ls_mask[49:96,1:73]*plotting_mask_ti[49:96,1:73],
+                                        SIM_DATA_past1000$GLOBAL_REGRESSION$REG_TEMP_ISOT_alpha[1:48,1:73]*plotting_ls_mask[1:48,1:73]*plotting_mask_ti[1:48,1:73]),
+                        ptlyr = SITES_USED_MAP,
+                        zoom = c(-180, -60, 180, 73),
+                        legend_names = list(grid = "Corr T-I"),
+                        centercolor = list(grid = "white", pt = "white")) +
+  ggtitle("Local Temp-Isotopic Composition Regression, r2>0.5") +
+  theme(plot.title = element_text(h = 0.5))
+plot_reg_pi <- STACYmap(gridlyr = rbind(SIM_DATA_past1000$GLOBAL_REGRESSION$REG_PREC_ISOT_alpha[49:96,1:73]*plotting_ls_mask[49:96,1:73]*plotting_mask_pi[49:96,1:73],
+                                        SIM_DATA_past1000$GLOBAL_REGRESSION$REG_PREC_ISOT_alpha[1:48,1:73]*plotting_ls_mask[1:48,1:73]*plotting_mask_pi[1:48,1:73]),
+                        ptlyr = SITES_USED_MAP,
+                        zoom = c(-180, -60, 180, 73),
+                        legend_names = list(grid = "Corr P-I"),
+                        centercolor = list(grid = "white", pt = "white")) +
+  ggtitle("Local Prec-Isotopic Composition Regression, r2>0.5") +
+  theme(plot.title = element_text(h = 0.5))
+
+plot_reg_tp %>% ggsave(filename = paste('Map_Reg_Temp_Prec_p01', 'png', sep = '.'), plot = ., path = 'Plots', 
+                       width = 15, height = 10, units = 'cm', dpi = 'print')
+plot_reg_ti %>% ggsave(filename = paste('Map_Reg_Temp_Isot_p01', 'png', sep = '.'), plot = ., path = 'Plots', 
+                       width = 15, height = 10, units = 'cm', dpi = 'print')
+plot_reg_pi %>% ggsave(filename = paste('Map_Reg_Prec_Isot_p01', 'png', sep = '.'), plot = ., path = 'Plots', 
+                       width = 15, height = 10, units = 'cm', dpi = 'print')
+
+remove(plotting_mask_pi, plotting_mask_ti, plotting_mask_tp)
+remove(plot_reg_pi, plot_reg_ti, plot_reg_tp)
+
+#################################################
+##POINT CORRELATION FOR SITES USED ##############
+#################################################
+
+for (ii in sites_used){
+  
+  CORR_DATA_TI = array(dim = c(96,73))
+  CORR_DATA_TI_P = array(dim = c(96,73))
+  CORR_DATA_PI = array(dim = c(96,73))
+  CORR_DATA_PI_P = array(dim = c(96,73))
+  
+  lon_cave = ceiling(CAVES$site_info$longitude[ii]/360*96)
+  lat_cave = ceiling(CAVES$site_info$latitude[ii]/180*76)
+  
+  for (lon in 1:97){
+    for (lat in 1:76){
+      
+      if(!any(is.na(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,lat,]))){
+        COR_TI = cor.test(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon_cave, lat_cave,], 
+                          SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,      lat,], na.rm = TRUE)
+        COR_PI = cor.test(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon_cave, lat_cave,], 
+                          SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_PREC_YEARLY[lon,      lat,], na.rm = TRUE)
+        
+        CORR_DATA_TI[lon,lat] = COR_TI$estimate[[1]]
+        CORR_DATA_TI_P[lon,lat] = COR_TI$p.value
+        
+        CORR_DATA_PI[lon,lat] = COR_PI$estimate[[1]]
+        CORR_DATA_PI_P[lon,lat] = COR_PI$p.value
+      }else{
+        CORR_DATA_TI[lon,lat] = NA
+        CORR_DATA_TI_P[lon,lat] = NA
+        
+        CORR_DATA_PI[lon,lat] = NA
+        CORR_DATA_PI_P[lon,lat] = NA
+      }
+      
+      
+      
+    }
+  }
+  
+  plotting_mask_ti <- CORR_DATA_TI_P[lon,lat]
+  plotting_mask_ti[plotting_mask_ti>0.1] = NA
+  plotting_mask_ti[plotting_mask_ti<0.1] = 1
+  
+  plotting_mask_pi <- CORR_DATA_PI_P[lon,lat]
+  plotting_mask_pi[plotting_mask_ti>0.1] = NA
+  plotting_mask_pi[plotting_mask_ti<0.1] = 1
+  
+  SITE_MAP = data.frame(
+    x_lon = CAVES$site_info$longitude[ii],
+    y_lat = CAVES$site_info$latitude[ii],
+    cell_columns = NA
+  )
+  
+  plot_ti <- STACYmap(gridlyr = rbind(CORR_DATA_TI[49:96,1:73]*plotting_ls_mask[49:96,1:73]*plotting_mask_ti[49:96,1:73],
+                                      CORR_DATA_TI[1:48,1:73]*plotting_ls_mask[1:48,1:73]*plotting_mask_ti[1:48,1:73]),
+                      ptlyr = SITE_MAP,
+                      zoom = c(-180, -60, 180, 73),
+                      legend_names = list(grid = "Corr T-I"), 
+                      graticules = TRUE,
+                      centercolor = list(grid = "white", pt = "white")) + 
+    ggtitle("Corr. of surrounding temp with local isotopic composition, p<0.1") +
+    theme(plot.title = element_text(h = 0.5))
+  
+  plot_ti %>% ggsave(filename = paste(paste0('Map_Cor_Temp_Isot_p01_', 'site', ii), 'png', sep = '.'), plot = ., path = 'Plots/Site_Corr_Plots', 
+                     width = 15, height = 10, units = 'cm', dpi = 'print')
+  
+  plot_pi <- STACYmap(gridlyr = rbind(CORR_DATA_PI[49:96,1:73]*plotting_ls_mask[49:96,1:73]*plotting_mask_ti[49:96,1:73],
+                                      CORR_DATA_PI[1:48,1:73]*plotting_ls_mask[1:48,1:73]*plotting_mask_ti[1:48,1:73]),
+                      ptlyr = SITE_MAP,
+                      zoom = c(-180, -60, 180, 73),
+                      legend_names = list(grid = "Corr T-I"), 
+                      graticules = TRUE,
+                      centercolor = list(grid = "white", pt = "white")) + 
+    ggtitle("Corr. of surrounding prec with local isotopic composition, p<0.1") +
+    theme(plot.title = element_text(h = 0.5))
+  
+  plot_pi %>% ggsave(filename = paste(paste0('Map_Cor_Prec_Isot_p01_', 'site', ii), 'png', sep = '.'), plot = ., path = 'Plots/Site_Corr_Plots', 
+                     width = 15, height = 10, units = 'cm', dpi = 'print')
+}
 
