@@ -343,11 +343,16 @@ for (ii in sites_used){
   CORR_DATA_PI = array(dim = c(96,73))
   CORR_DATA_PI_P = array(dim = c(96,73))
   
-  lon_cave = ceiling(CAVES$site_info$longitude[ii]/360*96)
-  lat_cave = ceiling(CAVES$site_info$latitude[ii]/180*76)
+  lon_raw = CAVES$site_info$longitude[ii]
+  if(lon_raw<0){
+    lon_raw = lon_raw+360
+  }
   
-  for (lon in 1:97){
-    for (lat in 1:76){
+  lon_cave = ceiling(lon_raw/360*96)
+  lat_cave = ceiling((CAVES$site_info$latitude[ii]+90)/180*73)
+  
+  for (lon in 1:96){
+    for (lat in 1:73){
       
       if(!any(is.na(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,lat,]))){
         COR_TI = cor.test(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon_cave, lat_cave,], 
@@ -373,44 +378,44 @@ for (ii in sites_used){
     }
   }
   
-  plotting_mask_ti <- CORR_DATA_TI_P[lon,lat]
+  plotting_mask_ti <- CORR_DATA_TI_P
   plotting_mask_ti[plotting_mask_ti>0.1] = NA
   plotting_mask_ti[plotting_mask_ti<0.1] = 1
   
-  plotting_mask_pi <- CORR_DATA_PI_P[lon,lat]
+  plotting_mask_pi <- CORR_DATA_PI_P
   plotting_mask_pi[plotting_mask_ti>0.1] = NA
   plotting_mask_pi[plotting_mask_ti<0.1] = 1
   
   SITE_MAP = data.frame(
     x_lon = CAVES$site_info$longitude[ii],
     y_lat = CAVES$site_info$latitude[ii],
-    cell_columns = NA
+    cell_columns = c(1)
   )
   
-  plot_ti <- STACYmap(gridlyr = rbind(CORR_DATA_TI[49:96,1:73]*plotting_ls_mask[49:96,1:73]*plotting_mask_ti[49:96,1:73],
-                                      CORR_DATA_TI[1:48,1:73]*plotting_ls_mask[1:48,1:73]*plotting_mask_ti[1:48,1:73]),
+  plot_ti <- STACYmap(gridlyr = rbind(CORR_DATA_TI[49:96,1:73]*plotting_mask_ti[49:96,1:73],
+                                      CORR_DATA_TI[1:48,1:73]*plotting_mask_ti[1:48,1:73]),
                       ptlyr = SITE_MAP,
                       zoom = c(-180, -60, 180, 73),
                       legend_names = list(grid = "Corr T-I"), 
                       graticules = TRUE,
                       centercolor = list(grid = "white", pt = "white")) + 
-    ggtitle("Corr. of surrounding temp with local isotopic composition, p<0.1") +
+    ggtitle(paste0("Corr. of global temp w/ local isot-comp, p<0.1, site ", ii)) +
     theme(plot.title = element_text(h = 0.5))
   
-  plot_ti %>% ggsave(filename = paste(paste0('Map_Cor_Temp_Isot_p01_', 'site', ii), 'png', sep = '.'), plot = ., path = 'Plots/Site_Corr_Plots', 
+  plot_ti %>% ggsave(filename = paste(paste0('Map_Cor_TI_p01_', 'site', ii), 'png', sep = '.'), plot = ., path = 'Plots/Site_Corr_Plots', 
                      width = 15, height = 10, units = 'cm', dpi = 'print')
   
-  plot_pi <- STACYmap(gridlyr = rbind(CORR_DATA_PI[49:96,1:73]*plotting_ls_mask[49:96,1:73]*plotting_mask_ti[49:96,1:73],
-                                      CORR_DATA_PI[1:48,1:73]*plotting_ls_mask[1:48,1:73]*plotting_mask_ti[1:48,1:73]),
+  plot_pi <- STACYmap(gridlyr = rbind(CORR_DATA_PI[49:96,1:73]*plotting_mask_ti[49:96,1:73],
+                                      CORR_DATA_PI[1:48,1:73]*plotting_mask_ti[1:48,1:73]),
                       ptlyr = SITE_MAP,
                       zoom = c(-180, -60, 180, 73),
                       legend_names = list(grid = "Corr T-I"), 
                       graticules = TRUE,
                       centercolor = list(grid = "white", pt = "white")) + 
-    ggtitle("Corr. of surrounding prec with local isotopic composition, p<0.1") +
+    ggtitle(paste0("Corr. of global prec w/ local isot-comp, p<0.1, site ", ii)) +
     theme(plot.title = element_text(h = 0.5))
   
-  plot_pi %>% ggsave(filename = paste(paste0('Map_Cor_Prec_Isot_p01_', 'site', ii), 'png', sep = '.'), plot = ., path = 'Plots/Site_Corr_Plots', 
+  plot_pi %>% ggsave(filename = paste(paste0('Map_Cor_PI_p01_', 'site', ii), 'png', sep = '.'), plot = ., path = 'Plots/Site_Corr_Plots', 
                      width = 15, height = 10, units = 'cm', dpi = 'print')
 }
 
