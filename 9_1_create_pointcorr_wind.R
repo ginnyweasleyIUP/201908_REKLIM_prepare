@@ -70,59 +70,163 @@ for (ii in sites_used_short){
     WIND_MEAN_ANGLE_PREC = array(dim = c(96,72))
   )
   
+  lon_raw <- CAVES$site_info$longitude[ii]
+  if(lon_raw<0){
+    lon_raw = lon_raw+360
+  }
+  
+  lon_cave = ceiling(lon_raw/360*96)
+  lat_cave = ceiling((CAVES$site_info$latitude[ii]+90)/180*73)
+  
   for (lon in 1:96){
+    print(lon)
     for (lat in 1:72){
+      
+      #print(paste0(ii, " lon: ", lon, ", lat: ", lat))
       
       SIM_DATA_past1000_wind[[name]]$WIND_MEAN_STRENGTH[lon,lat] = mean(sqrt(SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,]^2 + 
                                                                                SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,]^2))
-      SIM_DATA_past1000_wind[[name]]$WIND_MEAN_ANGLE[lon,lat] = mean(atan(SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,]/SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,]), na.rm = TRUE)*180/pi
+      SIM_DATA_past1000_wind[[name]]$WIND_MEAN_ANGLE[lon,lat] = mean(atan2(SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,], SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,]), na.rm = TRUE)
       
       #precipitation weighted --> PREC OF THE CAVE!!!
-      lon_cave = ceiling(lon_raw/360*96)
-      lat_cave = ceiling((CAVES$site_info$latitude[ii]+90)/180*73)
-      SIM_DATA_past1000_wind[[name]]$WIND_MEAN_STRENGTH_PREC[lon,lat] = sum(SIM_DATA_past1000_wind_raw$RAW$prec_raw[lon_cave,lat_cave,] * 
-                                                                              sqrt(SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,]^2 + 
-                                                                                     SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,]^2), na.rm = TRUE) / sum(SIM_DATA_past1000_wind_raw$RAW$prec_raw[lon_cave,lat_cave,], na.rm = TRUE)
-      SIM_DATA_past1000_wind[[name]]$WIND_MEAN_ANGLE_PREC[lon,lat] = sum(SIM_DATA_past1000_wind_raw$RAW$prec_raw[lon_cave,lat_cave,]*
-                                                                           180/pi*atan(SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,]/SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,]), na.rm = TRUE) / sum(SIM_DATA_past1000_wind_raw$RAW$prec_raw[lon_cave,lat_cave,], na.rm = TRUE)
+      #lon_cave = ceiling(lon_raw/360*96)
+      #lat_cave = ceiling((CAVES$site_info$latitude[ii]+90)/180*73)
+      #SIM_DATA_past1000_wind[[name]]$WIND_MEAN_STRENGTH_PREC[lon,lat] = sum(SIM_DATA_past1000_wind_raw$RAW$prec_raw[lon_cave,lat_cave,] * 
+      #                                                                        sqrt(SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,]^2 + 
+      #                                                                               SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,]^2), na.rm = TRUE) / sum(SIM_DATA_past1000_wind_raw$RAW$prec_raw[lon_cave,lat_cave,], na.rm = TRUE)
+      #SIM_DATA_past1000_wind[[name]]$WIND_MEAN_ANGLE_PREC[lon,lat] = sum(SIM_DATA_past1000_wind_raw$RAW$prec_raw[lon_cave,lat_cave,]*
+      #                                                                     atan(- SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,]/SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,]), na.rm = TRUE) / sum(SIM_DATA_past1000_wind_raw$RAW$prec_raw[lon_cave,lat_cave,], na.rm = TRUE)
       
     }
   }
 }
 
-Temp_map <-data.frame(
-  value = as.vector(SIM_DATA_past1000$GLOBAL_DATA_MEAN$GLOBAL_DATA_TEMP_MEAN),
-  x_lon = rep(c(seq(0, 179, length.out = 48),seq(-179, 0, length.out = 48)),73),
-  y_lat = rep(seq(88.5, -88.5, length.out = 73), each = 96)
+# Temp_map <-data.frame(
+#   value = as.vector(SIM_DATA_past1000$GLOBAL_DATA_MEAN$GLOBAL_DATA_TEMP_MEAN),
+#   x_lon = rep(c(seq(0, 179, length.out = 48),seq(-179, 0, length.out = 48)),73),
+#   y_lat = rep(seq(88.5, -88.5, length.out = 73), each = 96)
+# )
+# 
+# Wind_map_27 <- data.frame(
+#   radius = as.vector(SIM_DATA_past1000_wind$CAVE27$WIND_MEAN_STRENGTH),
+#   angle = as.vector(SIM_DATA_past1000_wind$CAVE27$WIND_MEAN_ANGLE),
+#   x_lon = rep(c(seq(0, 179, length.out = 48),seq(-179, 0, length.out = 48)),72),
+#   y_lat = rep(seq(88.5, -88.5, length.out = 72), each = 96)
+# )
+# 
+# West_wind_27 <- data.frame(
+#   radius = as.vector(SIM_DATA_past1000_wind_raw$RAW$westerly_raw[, , 1]),
+#   angle = numeric(6912),#+pi/2,
+#   x_lon = rep(c(seq(0, 179, length.out = 48),seq(-179, 0, length.out = 48)),72),
+#   y_lat = rep(seq(88.5, -88.5, length.out = 72), each = 96)
+# )
+# 
+# plot <- ggplot() +  geom_polygon(data = land_map, aes(x = long, y = lat, group = group), size = 0.05, color = "black", fill = NA, alpha = 0.5) +coord_fixed(1.3) + 
+#   geom_tile(data = Temp_map, aes(x = x_lon, y = y_lat, fill = value), size = 50) + #(Non significant)
+#   scale_fill_gradient2(midpoint = 0, low = "#053061", mid = "white", high = "#67001F", space = "Lab", name = "Temp") +
+#   geom_spoke(data = Wind_map_27, aes(x=x_lon, y=y_lat, angle = angle, radius = radius), arrow = arrow(length = unit(.04, 'inches'))) +
+#   geom_polygon(data = land_map, aes(x = long, y = lat, group = group), size = 0.05, color = "black", fill = NA, alpha = 0.5)
+# 
+# plot
+
+# ggplot(Wind_map_27,
+#        aes(x = x_lon ,
+#            y = y_lat,
+#            fill = angle,
+#            angle = angle,
+#            radius = scales::rescale(radius, c(.2, .8)))) +
+#   geom_raster() +
+#   geom_spoke(arrow = arrow(length = unit(.05, 'inches'))) +
+#   scale_fill_distiller(palette = "RdYlGn") +
+#   coord_equal(expand = 0) +
+#   theme(legend.position = 'bottom',
+#         legend.direction = 'horizontal')
+
+#################################################
+## SEASONAL MEANS ###############################
+#################################################
+
+#Simulation starts at 1.June -> 1:3 = JJA
+
+for (ii in sites_used_short){
+  
+  msk_summer = rep(c(1,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA), 1149) #JJA
+  msk_autumn = rep(c(NA,NA,NA,1,1,1,NA,NA,NA,NA,NA,NA), 1149) #SON
+  msk_winter = rep(c(NA,NA,NA,NA,NA,1,1,1,NA,NA,NA,NA), 1149) #DJF
+  msk_spring = rep(c(NA,NA,NA,NA,NA,NA,NA,NA,NA,1,1,1), 1149) #MAM
+  
+  name = paste0("CAVE", ii)
+  
+  SIM_DATA_past1000_wind[[name]]$WIND_MEAN_STRENGTH_summer <- array(dim = c(96,72))
+  SIM_DATA_past1000_wind[[name]]$WIND_MEAN_STRENGTH_autumn <- array(dim = c(96,72))
+  SIM_DATA_past1000_wind[[name]]$WIND_MEAN_STRENGTH_winter <- array(dim = c(96,72))
+  SIM_DATA_past1000_wind[[name]]$WIND_MEAN_STRENGTH_spring <- array(dim = c(96,72))
+  SIM_DATA_past1000_wind[[name]]$WIND_MEAN_ANGLE_summer <- array(dim = c(96,72))
+  SIM_DATA_past1000_wind[[name]]$WIND_MEAN_ANGLE_autumn <- array(dim = c(96,72))
+  SIM_DATA_past1000_wind[[name]]$WIND_MEAN_ANGLE_winter <- array(dim = c(96,72))
+  SIM_DATA_past1000_wind[[name]]$WIND_MEAN_ANGLE_spring <- array(dim = c(96,72))
+  
+  for (lon in 1:96){
+    print(lon)
+    for (lat in 1:72){
+      
+      SIM_DATA_past1000_wind[[name]]$WIND_MEAN_STRENGTH_summer[lon,lat] = mean(msk_summer*sqrt(SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,1:13788]^2 + 
+                                                                               SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,1:13788]^2), na.rm = TRUE)
+      SIM_DATA_past1000_wind[[name]]$WIND_MEAN_ANGLE_summer[lon,lat] = mean(msk_summer*atan2(SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,1:13788], 
+                                                                                      SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,1:13788]), na.rm = TRUE)
+      SIM_DATA_past1000_wind[[name]]$WIND_MEAN_STRENGTH_autumn[lon,lat] = mean(msk_autumn*sqrt(SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,1:13788]^2 + 
+                                                                                                 SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,1:13788]^2), na.rm = TRUE)
+      SIM_DATA_past1000_wind[[name]]$WIND_MEAN_ANGLE_autumn[lon,lat] = mean(msk_autumn*atan2(SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,1:13788], 
+                                                                                             SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,1:13788]), na.rm = TRUE)
+      SIM_DATA_past1000_wind[[name]]$WIND_MEAN_STRENGTH_winter[lon,lat] = mean(msk_winter*sqrt(SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,1:13788]^2 + 
+                                                                                                 SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,1:13788]^2), na.rm = TRUE)
+      SIM_DATA_past1000_wind[[name]]$WIND_MEAN_ANGLE_winter[lon,lat] = mean(msk_winter*atan2(SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,1:13788], 
+                                                                                             SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,1:13788]), na.rm = TRUE)
+      SIM_DATA_past1000_wind[[name]]$WIND_MEAN_STRENGTH_spring[lon,lat] = mean(msk_spring*sqrt(SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,1:13788]^2 + 
+                                                                                                 SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,1:13788]^2), na.rm = TRUE)
+      SIM_DATA_past1000_wind[[name]]$WIND_MEAN_ANGLE_spring[lon,lat] = mean(msk_spring*atan2(SIM_DATA_past1000_wind_raw$RAW$southerly_raw[lon,lat,1:13788], 
+                                                                                             SIM_DATA_past1000_wind_raw$RAW$westerly_raw[lon,lat,1:13788]), na.rm = TRUE)
+      
+      
+    }
+  }
+  
+  
+  
+}
+
+remove(msk_summer, msk_autumn, msk_winter, msk_spring)
+
+summer_wind_27 <- data.frame(
+  lon = rep(c(seq(0, 179, length.out = 48),seq(-179, 0, length.out = 48)),72),
+  lat = rep(seq(88.5, -88.5, length.out = 72), each = 96),
+  angle = as.vector(SIM_DATA_past1000_wind$CAVE27$WIND_MEAN_ANGLE_spring),
+  radius = as.vector(SIM_DATA_past1000_wind$CAVE27$WIND_MEAN_STRENGTH_spring)
 )
 
-Wind_map_27 <- data.frame(
-  radius = as.vector(SIM_DATA_past1000_wind$CAVE27$WIND_MEAN_STRENGTH),
-  angle = as.vector(SIM_DATA_past1000_wind$CAVE27$WIND_MEAN_ANGLE)/180*pi,
-  x_lon = rep(c(seq(0, 179, length.out = 48),seq(-179, 0, length.out = 48)),72),
-  y_lat = rep(seq(88.5, -88.5, length.out = 72), each = 96)
-)
-
-plot <- ggplot() +  geom_polygon(data = land_map, aes(x = long, y = lat, group = group), size = 0.05, color = "black", fill = NA, alpha = 0.5) +coord_fixed(1.3) + 
+plot <- ggplot() +  geom_polygon(data = land_map, aes(x = long, y = lat, group = group), size = 0.05, color = "black", fill = NA, alpha = 0.5) +coord_fixed(1.3) +
   geom_tile(data = Temp_map, aes(x = x_lon, y = y_lat, fill = value), size = 50) + #(Non significant)
   scale_fill_gradient2(midpoint = 0, low = "#053061", mid = "white", high = "#67001F", space = "Lab", name = "Temp") +
-  geom_spoke(data = Wind_map_27, aes(x=x_lon, y=y_lat, angle = angle, radius = radius), arrow = arrow(length = unit(.03, 'inches'))) +
+  geom_spoke(data = summer_wind_27, aes(x=lon, y=lat, angle = angle, radius = radius), size = .2, arrow = arrow(length = unit(.03, 'inches')), alpha = 0.5) +
   geom_polygon(data = land_map, aes(x = long, y = lat, group = group), size = 0.05, color = "black", fill = NA, alpha = 0.5)
+
+plot <- STACYmap(gridlyr = rbing(SIM_DATA_past1000$GLOBAL_DATA_MEAN$GLOBAL_DATA_PREC_MEAN[49:96,1:73], SIM_DATA_past1000$GLOBAL_DATA_MEAN$GLOBAL_DATA_PREC_MEAN[1:48,1:73]),
+                 ptlyr = SITE_MAP,
+                 fldlyr = summer_wind_27,
+                 zoom)
+
+# plot_ti <- STACYmap(gridlyr = rbind(CORR_DATA_TI[49:96,1:73]*plotting_mask_ti[49:96,1:73],CORR_DATA_TI[1:48,1:73]*plotting_mask_ti[1:48,1:73]),
+#                     ptlyr = SITE_MAP,
+#                     fldlyr = rbind()
+#                     zoom = c(-180, -60, 180, 73),
+#                     legend_names = list(grid = "Corr T-I"),
+#                     graticules = TRUE,
+#                     centercolor = list(grid = "white", pt = "white")) + 
+#   ggtitle(paste0("Corr. of global temp w/ local isot-comp, p<0.1, site ", ii)) +
+#   theme(plot.title = element_text(h = 0.5))
 
 plot
 
-ggplot(Wind_map_27,
-       aes(x = x_lon ,
-           y = y_lat,
-           fill = angle,
-           angle = angle,
-           radius = scales::rescale(radius, c(.2, .8)))) +
-  geom_raster() +
-  geom_spoke(arrow = arrow(length = unit(.05, 'inches'))) +
-  scale_fill_distiller(palette = "RdYlGn") +
-  coord_equal(expand = 0) +
-  theme(legend.position = 'bottom',
-        legend.direction = 'horizontal')
 
 #########################
 ## TO DO AM DONNERSTAG
@@ -130,7 +234,9 @@ ggplot(Wind_map_27,
 # * DJF, MAM, JJA, SON - Mittel anschauen und sehen ob das anders wird
 # * vergleichen warum alles immer nach Osten geht, weil ja auf der westerly plot Karte auch viel nach Westen geht?!?
 # * dann teleconnection-wise alle significanten Punkte mit einbeziehen
+# * STACYmap aus Github --> branch einarbeiten?!?
 # * in STACYmaps einbauen -> radius als Option mit übergeben
+
 
 
 #--> Create list with assigned names for Cave sites used, where matrix of precipitation weighted average wind size is saved
@@ -153,86 +259,86 @@ ggplot(Wind_map_27,
 ##POINT CORRELATION FOR SITES USED ##############
 #################################################
 
-for (ii in sites_used_short){
-  
-  CORR_DATA_TI = array(dim = c(96,73))
-  CORR_DATA_TI_P = array(dim = c(96,73))
-  CORR_DATA_PI = array(dim = c(96,73))
-  CORR_DATA_PI_P = array(dim = c(96,73))
-  
-  lon_raw = CAVES$site_info$longitude[ii]
-  if(lon_raw<0){
-    lon_raw = lon_raw+360
-  }
-  
-  lon_cave = ceiling(lon_raw/360*96)
-  lat_cave = ceiling((CAVES$site_info$latitude[ii]+90)/180*73)
-  
-  for (lon in 1:96){
-    for (lat in 1:73){
-      
-      if(!any(is.na(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,lat,]))){
-        COR_TI = cor.test(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon_cave, lat_cave,], 
-                          SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,      lat,], na.rm = TRUE)
-        COR_PI = cor.test(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon_cave, lat_cave,], 
-                          SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_PREC_YEARLY[lon,      lat,], na.rm = TRUE)
-        
-        CORR_DATA_TI[lon,lat] = COR_TI$estimate[[1]]
-        CORR_DATA_TI_P[lon,lat] = COR_TI$p.value
-        
-        CORR_DATA_PI[lon,lat] = COR_PI$estimate[[1]]
-        CORR_DATA_PI_P[lon,lat] = COR_PI$p.value
-      }else{
-        CORR_DATA_TI[lon,lat] = NA
-        CORR_DATA_TI_P[lon,lat] = NA
-        
-        CORR_DATA_PI[lon,lat] = NA
-        CORR_DATA_PI_P[lon,lat] = NA
-      }
-      
-      
-      
-    }
-  }
-  
-  plotting_mask_ti <- CORR_DATA_TI_P
-  plotting_mask_ti[plotting_mask_ti>0.1] = NA
-  plotting_mask_ti[plotting_mask_ti<0.1] = 1
-  
-  plotting_mask_pi <- CORR_DATA_PI_P
-  plotting_mask_pi[plotting_mask_ti>0.1] = NA
-  plotting_mask_pi[plotting_mask_ti<0.1] = 1
-  
-  SITE_MAP = data.frame(
-    x_lon = CAVES$site_info$longitude[ii],
-    y_lat = CAVES$site_info$latitude[ii],
-    cell_columns = c(1)
-  )
-  
-  plot_ti <- STACYmap(gridlyr = rbind(CORR_DATA_TI[49:96,1:73]*plotting_mask_ti[49:96,1:73],
-                                      CORR_DATA_TI[1:48,1:73]*plotting_mask_ti[1:48,1:73]),
-                      ptlyr = SITE_MAP,
-                      zoom = c(-180, -60, 180, 73),
-                      legend_names = list(grid = "Corr T-I"), 
-                      graticules = TRUE,
-                      centercolor = list(grid = "white", pt = "white")) + 
-    ggtitle(paste0("Corr. of global temp w/ local isot-comp, p<0.1, site ", ii)) +
-    theme(plot.title = element_text(h = 0.5))
-  
-  plot_ti %>% ggsave(filename = paste(paste0('Map_Cor_TI_p01_', 'site', ii), 'png', sep = '.'), plot = ., path = 'Plots/Site_Corr_Plots_Wind', 
-                     width = 15, height = 10, units = 'cm', dpi = 'print')
-  
-  plot_pi <- STACYmap(gridlyr = rbind(CORR_DATA_PI[49:96,1:73]*plotting_mask_ti[49:96,1:73],
-                                      CORR_DATA_PI[1:48,1:73]*plotting_mask_ti[1:48,1:73]),
-                      ptlyr = SITE_MAP,
-                      zoom = c(-180, -60, 180, 73),
-                      legend_names = list(grid = "Corr T-I"), 
-                      graticules = TRUE,
-                      centercolor = list(grid = "white", pt = "white")) + 
-    ggtitle(paste0("Corr. of global prec w/ local isot-comp, p<0.1, site ", ii)) +
-    theme(plot.title = element_text(h = 0.5))
-  
-  plot_pi %>% ggsave(filename = paste(paste0('Map_Cor_PI_p01_', 'site', ii), 'png', sep = '.'), plot = ., path = 'Plots/Site_Corr_Plots_Wind', 
-                     width = 15, height = 10, units = 'cm', dpi = 'print')
-}
-
+# for (ii in sites_used_short){
+#   
+#   CORR_DATA_TI = array(dim = c(96,73))
+#   CORR_DATA_TI_P = array(dim = c(96,73))
+#   CORR_DATA_PI = array(dim = c(96,73))
+#   CORR_DATA_PI_P = array(dim = c(96,73))
+#   
+#   lon_raw <- CAVES$site_info$longitude[ii]
+#   if(lon_raw<0){
+#     lon_raw = lon_raw+360
+#   }
+#   
+#   lon_cave = ceiling(lon_raw/360*96)
+#   lat_cave = ceiling((CAVES$site_info$latitude[ii]+90)/180*73)
+#   
+#   for (lon in 1:96){
+#     for (lat in 1:73){
+#       
+#       if(!any(is.na(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,lat,]))){
+#         COR_TI = cor.test(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon_cave, lat_cave,], 
+#                           SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_TEMP_YEARLY[lon,      lat,], na.rm = TRUE)
+#         COR_PI = cor.test(SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_ISOT_YEARLY[lon_cave, lat_cave,], 
+#                           SIM_DATA_past1000$GLOBAL_DATA_YEARLY$GLOBAL_DATA_PREC_YEARLY[lon,      lat,], na.rm = TRUE)
+#         
+#         CORR_DATA_TI[lon,lat] = COR_TI$estimate[[1]]
+#         CORR_DATA_TI_P[lon,lat] = COR_TI$p.value
+#         
+#         CORR_DATA_PI[lon,lat] = COR_PI$estimate[[1]]
+#         CORR_DATA_PI_P[lon,lat] = COR_PI$p.value
+#       }else{
+#         CORR_DATA_TI[lon,lat] = NA
+#         CORR_DATA_TI_P[lon,lat] = NA
+#         
+#         CORR_DATA_PI[lon,lat] = NA
+#         CORR_DATA_PI_P[lon,lat] = NA
+#       }
+#       
+#       
+#       
+#     }
+#   }
+#   
+#   plotting_mask_ti <- CORR_DATA_TI_P
+#   plotting_mask_ti[plotting_mask_ti>0.1] = NA
+#   plotting_mask_ti[plotting_mask_ti<0.1] = 1
+#   
+#   plotting_mask_pi <- CORR_DATA_PI_P
+#   plotting_mask_pi[plotting_mask_ti>0.1] = NA
+#   plotting_mask_pi[plotting_mask_ti<0.1] = 1
+#   
+#   SITE_MAP = data.frame(
+#     x_lon = CAVES$site_info$longitude[ii],
+#     y_lat = CAVES$site_info$latitude[ii],
+#     cell_columns = c(1)
+#   )
+#   
+#   plot_ti <- STACYmap(gridlyr = rbind(CORR_DATA_TI[49:96,1:73]*plotting_mask_ti[49:96,1:73],
+#                                       CORR_DATA_TI[1:48,1:73]*plotting_mask_ti[1:48,1:73]),
+#                       ptlyr = SITE_MAP,
+#                       zoom = c(-180, -60, 180, 73),
+#                       legend_names = list(grid = "Corr T-I"), 
+#                       graticules = TRUE,
+#                       centercolor = list(grid = "white", pt = "white")) + 
+#     ggtitle(paste0("Corr. of global temp w/ local isot-comp, p<0.1, site ", ii)) +
+#     theme(plot.title = element_text(h = 0.5))
+#   
+#   plot_ti %>% ggsave(filename = paste(paste0('Map_Cor_TI_p01_', 'site', ii), 'png', sep = '.'), plot = ., path = 'Plots/Site_Corr_Plots_Wind', 
+#                      width = 15, height = 10, units = 'cm', dpi = 'print')
+#   
+#   plot_pi <- STACYmap(gridlyr = rbind(CORR_DATA_PI[49:96,1:73]*plotting_mask_ti[49:96,1:73],
+#                                       CORR_DATA_PI[1:48,1:73]*plotting_mask_ti[1:48,1:73]),
+#                       ptlyr = SITE_MAP,
+#                       zoom = c(-180, -60, 180, 73),
+#                       legend_names = list(grid = "Corr T-I"), 
+#                       graticules = TRUE,
+#                       centercolor = list(grid = "white", pt = "white")) + 
+#     ggtitle(paste0("Corr. of global prec w/ local isot-comp, p<0.1, site ", ii)) +
+#     theme(plot.title = element_text(h = 0.5))
+#   
+#   plot_pi %>% ggsave(filename = paste(paste0('Map_Cor_PI_p01_', 'site', ii), 'png', sep = '.'), plot = ., path = 'Plots/Site_Corr_Plots_Wind', 
+#                      width = 15, height = 10, units = 'cm', dpi = 'print')
+# }
+# 

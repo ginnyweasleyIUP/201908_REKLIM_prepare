@@ -25,6 +25,8 @@ GLOBAL_FONT_FACE_TEXT <- 'plain'
 GLOBAL_FONT_SIZE <- 11
 GLOBAL_FONT_FAMILY <- 'sans'
 GLOBAL_POINT_SIZE <- 3
+GLOBAL_ARROW_SIZE <- 0.03
+GLOBAL_FIELD_SIZE <- 0.2
 GLOBAL_BATHYMETRY_COLORS <- c('#d9ebf9', '#cae1f4', '#afd3ef', '#aacde9', '#96c1e3', '#83b9df', '#6fadd6', '#5ba2d0', '#589cc9', '#337fb2', '#2a77ac', '#2371a6')
 GLOBAL_LAND_COLOR <- '#f0e6c2'
 GLOBAL_OCEAN_COLOR <- '#aacde9'
@@ -70,6 +72,7 @@ transform_shapefile <- function(data, transform) {
 #' @param gridlyr latlon-grid to plot of class raster, matrix (both lon columns, lat rows, cell value) or data.frame/tibble (either lon columns, lat rows, cell value or lon, lat, cell columns)
 #' @param plgnlyr NOT YET IMPLEMENTED latlon-polygon layer, can be a raster object (will be converted as is to SpatialPolygonsDataFrame) or SpatialPolyGonsDataFrame or sf, will be plotted on top of gridlyr
 #' @param ptlyr point layer of class matrix or data.frame (lon, lat, cell columns)
+#' @param fldlyr field layer of class data.frame (lon,lat, angle(, radius)) containing the angle of the field (mandatory) and the radius (optional)
 #' @param coastline logical - plot coastline?
 #' @param bathymetry logical - plot ocean bathymetry?, option can be used independently of coastlines and will underlay a climate field
 #' @param projection object of class CRS or character (is converted to CRS), see package rgdal
@@ -109,6 +112,7 @@ transform_shapefile <- function(data, transform) {
 #' plt <- STACYmap(ptlyr = ptlyr, colorscheme = 'temp', filledbg = T, projection = '+proj=laea +lat_0=52 +lon_0=10 +x_0=4321000 +y_0=3210000')
 STACYmap <- function(gridlyr = NULL, 
                      ptlyr = NULL, 
+                     fldlyr = NULL,
                      coastline = TRUE,
                      filledbg = FALSE,
                      bathymetry = FALSE,
@@ -213,6 +217,29 @@ STACYmap <- function(gridlyr = NULL,
         bind_cols(select(ptlyr, ptid, layer))
       ptlyr <- ptlyr_trf
       rm(ptlyr_trf)
+    }
+  }
+  #fieldlyr projection
+  if (!is.null(fldlyr)) {
+    if (!any(class(fldlyr) %in% c('matrix', 'data.frame'))) {
+      stop('class(ptlyr) has to be one of \'matrix\', \'data.frame\'')
+    } else {
+      prep <- list(matrix = function(x) as_tibble(as.data.frame(x)), 
+                   data.frame = function(x) as_tibble(x)
+      )
+      fldlyr <- fldlyr %>% 
+        prep[[class(fldlyr)[length(class(fldlyr))]]](.) %>% 
+        rename(long = 1, lat = 2, angle = 3, radius = 4)
+      
+      fldlyr <- fldlyr %>% 
+        rownames_to_column('fldid')
+      fldlyr_trf <- project(cbind(fldlyr$long, fldlyr$lat),
+                           proj = as.character(projection)) %>% 
+        as_tibble() %>% 
+        rename(long = V1, lat = V2) %>% 
+        bind_cols(select(fldlyr, fldid, angle, radius))
+      fldlyr <- fldlyr_trf
+      rm(fldlyr_trf)
     }
   }
   
@@ -400,6 +427,27 @@ STACYmap <- function(gridlyr = NULL,
                    fill = NA,
                    colour = 'black',
                    size = 0.25)
+  }
+  
+  #fieldlyr
+  
+  if(!is.null(fldlyr) & !is.null(fldlyr$radius)){
+    print(min(fldlyr$radius))
+    print(max(fldlyr$radius))
+    map_plot <- map_plot +
+      geom_spoke(data = fldlyr,
+                 mapping = aes(x=long, y= lat, angle = angle, radius = 100000*radius),
+                 arrow = arrow(length = unit(GLOBAL_ARROW_SIZE, 'inches')),
+                 size = GLOBAL_FIELD_SIZE,
+                 alpha = 0.6)
+  } else if(!is.null(fldlyr)){
+    map_plot <- map_plot +
+      geom_spoke(data = fldlyr,
+                 mapping = aes(x=long, y= lat, angle = angle, radius = 100000),
+                 arrow = arrow(length = unit(GLOBAL_ARROW_SIZE, 'inches')),
+                 size = GLOBAL_FIELD_SIZE,
+                 alpha = 0.6)
+    
   }
   
   # pointlyr
