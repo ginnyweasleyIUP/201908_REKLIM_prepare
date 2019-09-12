@@ -432,11 +432,9 @@ STACYmap <- function(gridlyr = NULL,
   #fieldlyr
   
   if(!is.null(fldlyr) & !is.null(fldlyr$radius)){
-    print(min(fldlyr$radius))
-    print(max(fldlyr$radius))
     map_plot <- map_plot +
       geom_spoke(data = fldlyr,
-                 mapping = aes(x=long, y= lat, angle = angle, radius = 100000*radius),
+                 mapping = aes(x=long, y= lat, angle = angle, radius = scales::rescale(radius, c(1e4, 8e5))),
                  arrow = arrow(length = unit(GLOBAL_ARROW_SIZE, 'inches')),
                  size = GLOBAL_FIELD_SIZE,
                  alpha = 0.6)
