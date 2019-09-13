@@ -222,7 +222,7 @@ STACYmap <- function(gridlyr = NULL,
   #fieldlyr projection
   if (!is.null(fldlyr)) {
     if (!any(class(fldlyr) %in% c('matrix', 'data.frame'))) {
-      stop('class(ptlyr) has to be one of \'matrix\', \'data.frame\'')
+      stop('class(fldlyr) has to be one of \'matrix\', \'data.frame\'')
     } else {
       prep <- list(matrix = function(x) as_tibble(as.data.frame(x)), 
                    data.frame = function(x) as_tibble(x)
@@ -453,13 +453,14 @@ STACYmap <- function(gridlyr = NULL,
   map_plot <- map_plot + 
     geom_point(data = ptlyr,
                mapping = aes(x = long, y = lat, fill = layer),#, size = has_slope), 
-               alpha = I(0.7), shape = 20, size = GLOBAL_POINT_SIZE,
-               show.legend = c(fill = {if (is.null(gridlyr) | splcol) {TRUE} else {FALSE}}, size = TRUE))
+               alpha = I(0.7), shape = 21, size = GLOBAL_POINT_SIZE,
+               show.legend = c(fill = {if (is.null(gridlyr) | splcol) {TRUE} else {FALSE}}))
   
     if (splcol | is.null(gridlyr)) {
       map_plot <- map_plot + 
         scale_fill_gradientn(colors = {if (splcol) {colorscheme$pt} else {colorscheme}}, 
                              limits = lims$point, 
+                             labels = c()
                              guide = guide_colorbar(legend_names$pt,
                                                     direction = 'horizontal', 
                                                     barwidth = 10, barheight = 0.3))

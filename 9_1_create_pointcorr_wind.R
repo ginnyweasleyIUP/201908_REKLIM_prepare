@@ -16,6 +16,42 @@ setwd("/home/ginnyweasley/Dokumente/01_Promotion/07_R_Code/201908_REKLIM_prepare
 #As an example, let's only try it for site 27 and 104
 
 
+geom_spoke_legend <- function(r, x, y, n = 5, scaled = c(2,8), 
+                              arrow = NULL, label = NULL) {
+  
+  dd <- data.frame(breaks = scales::pretty_breaks(n)(r))
+  dd$radius <- scales::rescale(dd$breaks, to = scaled, from = range(r, na.rm = T, finite = T))
+  dd$xpos <- seq(0, by = round(max(scaled)), length.out = length(dd$breaks))
+  dd$xpos <- dd$xpos + x
+  dd$ypos <- rep(y, length(dd$breaks))
+  
+  
+  
+  g <- list(
+    geom_spoke(data = dd,
+               aes(x = xpos, y = ypos + 2, radius = radius),
+               angle = pi/4, arrow = arrow,
+               inherit.aes = F),
+    geom_text(data = dd,
+              aes(x = xpos, y = ypos, label = format(breaks)),
+              hjust = 0, vjust = 0, size = 3,
+              inherit.aes = F)
+  )
+  
+  if (!is.null(label)) {
+    dd1 <- dd[1,]
+    dd1$label <- label
+    
+    g <- c(g,
+           geom_text(data = dd1,
+                     aes(x = xpos, y = ypos-2, label = label),
+                     hjust = 0, vjust = 0, size = 3,
+                     inherit.aes = F))
+  }
+  
+  g
+}
+
 #################################################
 
 sites_used_short = c(27,104)
@@ -75,13 +111,19 @@ sites_used_short = c(27,104)
 #   y_lat = rep(seq(88.5, -88.5, length.out = 72), each = 96)
 # )
 # 
-# plot <- ggplot() +  geom_polygon(data = land_map, aes(x = long, y = lat, group = group), size = 0.05, color = "black", fill = NA, alpha = 0.5) +coord_fixed(1.3) + 
-#   geom_tile(data = Temp_map, aes(x = x_lon, y = y_lat, fill = value), size = 50) + #(Non significant)
-#   scale_fill_gradient2(midpoint = 0, low = "#053061", mid = "white", high = "#67001F", space = "Lab", name = "Temp") +
-#   geom_spoke(data = Wind_map_27, aes(x=x_lon, y=y_lat, angle = angle, radius = radius), arrow = arrow(length = unit(.04, 'inches'))) +
-#   geom_polygon(data = land_map, aes(x = long, y = lat, group = group), size = 0.05, color = "black", fill = NA, alpha = 0.5)
-# 
-# plot
+plot <- ggplot() +  geom_polygon(data = land_map, aes(x = long, y = lat, group = group), size = 0.05, color = "black", fill = NA, alpha = 0.5) +coord_fixed(1.3) +
+  geom_tile(data = Temp_map, aes(x = x_lon, y = y_lat, fill = value), size = 50) + #(Non significant)
+  scale_fill_gradient2(midpoint = 0, low = "#053061", mid = "white", high = "#67001F", space = "Lab", name = "Temp") +
+  geom_spoke(data = Wind_map_27, aes(x=x_lon, y=y_lat, angle = angle, radius = radius), arrow = arrow(length = unit(.04, 'inches')),
+             show.legend = c(F,T)) +
+  scale_size(name = "arrows", range = c(0, 10), guide = "legend") +
+  geom_polygon(data = land_map, aes(x = long, y = lat, group = group), size = 0.05, color = "black", fill = NA, alpha = 0.5)
+
+#geom_spoke_legend(wind.dt$mean_wind, x = 186, y = 15.5, 
+                  #arrow = arrow(length = unit(.05, 'inches')),
+                  #label = "Mean windspeed")
+
+plot
 
 # ggplot(Wind_map_27,
 #        aes(x = x_lon ,
