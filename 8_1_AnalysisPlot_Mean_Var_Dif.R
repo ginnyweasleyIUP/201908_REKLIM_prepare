@@ -138,10 +138,206 @@ for (ii in sites_entities_used$entity_id){
   
 }
 
-plot(DATA_last1000_mean[[1]]$value_record_age, DATA_last1000_mean[[1]]$value_sim_d18O-DATA_last1000_mean[[1]]$value_record_d18O, type = "l", ylim = c(-5,5))
-lines(DATA_last1000_mean[[2]]$value_record_age, DATA_last1000_mean[[2]]$value_sim_d18O-DATA_last1000_mean[[2]]$value_record_d18O, col = "red")
-lines(DATA_last1000_mean[[3]]$value_record_age, DATA_last1000_mean[[3]]$value_sim_d18O-DATA_last1000_mean[[3]]$value_record_d18O, col = "blue")
-lines(DATA_last1000_mean[[4]]$value_record_age, DATA_last1000_mean[[4]]$value_sim_d18O-DATA_last1000_mean[[4]]$value_record_d18O, col = "green")
-lines(DATA_last1000_mean[[5]]$value_record_age, DATA_last1000_mean[[5]]$value_sim_d18O-DATA_last1000_mean[[5]]$value_record_d18O, col = "yellow")
-lines(DATA_last1000_mean[[6]]$value_record_age, DATA_last1000_mean[[6]]$value_sim_d18O-DATA_last1000_mean[[6]]$value_record_d18O, col = "darkblue")
-lines(DATA_last1000_mean[[7]]$value_record_age, DATA_last1000_mean[[7]]$value_sim_d18O-DATA_last1000_mean[[7]]$value_record_d18O, col = "cyan")
+#################################################
+## Aufgeteilt auf Kontinente ####################
+
+continents_used_entity <- c()
+country_used_entity <- c()
+
+for (entity in entities_used){
+  site <- sample_final %>% filter(entity_id == entity) %>% count(site_id) %>% pull(site_id)
+  continents_used_entity = c(continents_used_entity, as.character(sisal_data$Continent[site]))
+  country_used_entity = c(country_used_entity, as.character(sisal_data$Land[site]))
+}
+remove(site)
+
+## Change Group because closer together
+
+continents_used_entity[6] = "Europe"
+continents_used_entity[22] <- "Europe"
+continents_used_entity[4] <- continents_used_entity[7] <- continents_used_entity[9] <- continents_used_entity[15] <- continents_used_entity[20] <- continents_used_entity[21] <- continents_used_entity[29] <- "America"
+
+for (continent in c("Africa", "Antarctica", "Asia", "Australia", "Europe", "MiddleEast", "America")){
+  n = 0
+  for (ii in 1:length(entities_used)){
+    if(continents_used_entity[ii] == continent){
+      n = n+1
+    }
+  }
+  
+  if(n == 0){
+    next
+  }
+  
+  colorscheme = RColorBrewer::brewer.pal(n, 'Spectral')
+  
+  png(file = paste0("Plots/Mean_Diff_Continents/", "Mean_Diff", "_in_", continent, ".png"), width = 600, height = 500)
+  plot.new()
+  par(mar=c(5.1, 4.1, 4.1, 9.1), xpd=TRUE)
+  plot(1, 
+       type = "n",
+       xlim = c(0,1150), 
+       ylim = c(-7.5,7.5), 
+       xlab = "years before 2000 CE", 
+       ylab = "Diff in mean d18O (Sim-Record)", 
+       main = paste0("Difference level of d18O for ", continent, " region" ))
+  c = 1
+  jj = 1
+  legend_text = c()
+  for (entity in entities_used){
+    if (continents_used_entity[jj] == continent){
+      name = paste0("ENTITY", entity)
+      lines(DATA_last1000_mean[[name]]$value_record_age, 
+            DATA_last1000_mean[[name]]$value_sim_d18O - DATA_last1000_mean[[name]]$value_record_d18O, 
+            col = colorscheme[c],
+            lwd = 2)  
+      legend_text = c(legend_text, paste0("entity-", 
+                                          entity, 
+                                          "\n", 
+                                          sisal_data$Land[sample_final %>% filter(entity_id == entity) %>% count(site_id) %>% pull(site_id)],
+                                          "\n"))
+      c = c+1
+    }
+    jj = jj+1
+    
+  }
+  legend("topright",
+         inset=c(-0.3,0),
+         legend_text,
+         lty = numeric(n)+1, lwd = numeric(n)+2,
+         col = colorscheme)
+  dev.off()
+}
+remove(n, colorscheme, name, c, legend_text, jj)
+
+#################################################
+## Aufgeteilt nach Mean Temperature #############
+
+# Mean Temp < 15 Grad, 15<T<25, >25 Grad
+
+mean_temp_mask = numeric(length(entities_used))
+temp_mask_counter = numeric(3)
+ii = 1
+
+for (entity in entities_used){
+  site <- sample_final %>% filter(entity_id == entity) %>% count(site_id) %>% pull(site_id)
+  print(CAVES$climate_info$mean_temp[site])
+  if(CAVES$climate_info$mean_temp[site] < 12.5){
+    mean_temp_mask[ii] <- 1
+    temp_mask_counter[1] = temp_mask_counter[1] + 1
+  }else if (CAVES$climate_info$mean_temp[site] < 22.5){
+    mean_temp_mask[ii] <- 2
+    temp_mask_counter[2] = temp_mask_counter[2] + 1
+  } else {
+    mean_temp_mask[ii] <- 3
+    temp_mask_counter[3] = temp_mask_counter[3] + 1
+  }
+  ii = ii+1  
+}
+remove(ii)
+
+temp_names = c("T < 12.5°C", "12.5°C < T < 22.5°C", "T > 22.5°C")
+
+for (ii in 1:3){
+  colorscheme = RColorBrewer::brewer.pal(temp_mask_counter[ii], 'Spectral')
+  
+  png(file = paste0("Plots/Mean_Diff_Temp/", "Mean_Diff", "_T_", ii, ".png"), width = 600, height = 500)
+  plot.new()
+  par(mar=c(5.1, 4.1, 4.1, 9.1), xpd=TRUE)
+  plot(1, 
+       type = "n",
+       xlim = c(0,1150), 
+       ylim = c(-7.5,7.5), 
+       xlab = "years before 2000 CE", 
+       ylab = "Diff in mean d18O (Sim-Record)", 
+       main = paste0("Difference level of d18O for mean ", temp_names[ii] ))
+  c = 1
+  jj = 1
+  legend_text = c()
+  for (entity in entities_used){
+    if (mean_temp_mask[jj] == ii){
+      name = paste0("ENTITY", entity)
+      lines(DATA_last1000_mean[[name]]$value_record_age, 
+            DATA_last1000_mean[[name]]$value_sim_d18O - DATA_last1000_mean[[name]]$value_record_d18O, 
+            col = colorscheme[c],
+            lwd = 2)  
+      legend_text = c(legend_text, paste0("entity-", entity))
+      c = c+1
+    }
+    jj = jj+1
+  }
+  legend("topright",
+         inset=c(-0.3,0),
+         legend_text,
+         lty = numeric(temp_mask_counter[ii])+1, lwd = numeric(temp_mask_counter[ii])+2,
+         col = colorscheme)
+  dev.off()
+}
+
+remove(mean_temp_mask, temp_mask_counter, temp_names)
+
+#################################################
+## Aufgeteilt nach Mean Prec ####################
+
+# Mean Prec < 3e-5, 3e-5<P<5e-5, >5e-5 
+
+mean_prec_mask = numeric(length(entities_used))
+prec_mask_counter = numeric(3)
+ii = 1
+
+for (entity in entities_used){
+  site <- sample_final %>% filter(entity_id == entity) %>% count(site_id) %>% pull(site_id)
+  if(CAVES$climate_info$mean_prec[site] < 3e-5){
+    mean_prec_mask[ii] <- 1
+    prec_mask_counter[1] = prec_mask_counter[1] + 1
+  }else if (CAVES$climate_info$mean_prec[site] < 5e-5){
+    mean_prec_mask[ii] <- 2
+    prec_mask_counter[2] = prec_mask_counter[2] + 1
+  } else {
+    mean_prec_mask[ii] <- 3
+    prec_mask_counter[3] = prec_mask_counter[3] + 1
+  }
+  ii = ii+1  
+}
+remove(ii)
+
+prec_names = c("P < 3e-5 kg/m²/s", "5e-5 kg/m²/s < P < 3e-5 kg/m²/s", "P > 5e-5 kg/m²/s")
+
+for (ii in 1:3){
+  colorscheme = RColorBrewer::brewer.pal(prec_mask_counter[ii], 'Spectral')
+  
+  png(file = paste0("Plots/Mean_Diff_Prec/", "Mean_Diff", "_T_", ii, ".png"), width = 600, height = 500)
+  plot.new()
+  par(mar=c(5.1, 4.1, 4.1, 9.1), xpd=TRUE)
+  plot(1, 
+       type = "n",
+       xlim = c(0,1150), 
+       ylim = c(-7.5,7.5), 
+       xlab = "years before 2000 CE", 
+       ylab = "Diff in mean d18O (Sim-Record)", 
+       main = paste0("Difference level of d18O for mean ", prec_names[ii] ))
+  c = 1
+  jj = 1
+  legend_text = c()
+  for (entity in entities_used){
+    if (mean_prec_mask[jj] == ii){
+      name = paste0("ENTITY", entity)
+      lines(DATA_last1000_mean[[name]]$value_record_age, 
+            DATA_last1000_mean[[name]]$value_sim_d18O - DATA_last1000_mean[[name]]$value_record_d18O, 
+            col = colorscheme[c],
+            lwd = 2)  
+      legend_text = c(legend_text, paste0("entity-", entity))
+      c = c+1
+    }
+    jj = jj+1
+  }
+  legend("topright",
+         inset=c(-0.3,0),
+         legend_text,
+         lty = numeric(prec_mask_counter[ii])+1, lwd = numeric(prec_mask_counter[ii])+2,
+         col = colorscheme)
+  dev.off()
+}
+
+remove(mean_prec_mask, prec_mask_counter, prec_names)
+
