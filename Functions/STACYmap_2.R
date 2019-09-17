@@ -460,7 +460,7 @@ STACYmap <- function(gridlyr = NULL,
       map_plot <- map_plot + 
         scale_fill_gradientn(colors = {if (splcol) {colorscheme$pt} else {colorscheme}}, 
                              limits = lims$point, 
-                             labels = c()
+                             labels = c(),
                              guide = guide_colorbar(legend_names$pt,
                                                     direction = 'horizontal', 
                                                     barwidth = 10, barheight = 0.3))
@@ -509,6 +509,7 @@ STACYmap <- function(gridlyr = NULL,
   if (legend_inside) {map_plot <- map_plot + 
     theme(legend.position = c(0.02, 0.02), legend.justification = c(0, 0), legend.box = 'vertical')
   }
+  
   
   return(map_plot)
 }

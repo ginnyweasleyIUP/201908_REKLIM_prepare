@@ -68,16 +68,34 @@ MEAN_MAP <- data_frame(
 
 plot <- STACYmap(ptlyr = MEAN_MAP, 
                  zoom = c(-180,-60,180,73), 
-                 legend_names = list(pt = "Mean diff. in d18O level"))+ 
-  ggtitle("Diff in mean d18O level btw simulated P and measured calcite in cave") +
+                 legend_names = list(pt = TeX("Mean diff. in $\\delta ^{18}O$ level")))+ 
+  ggtitle(TeX("Diff. in mean $\\delta ^{18}O$ in sim.-record >50samples, period > 600y")) +
   theme(plot.title = element_text(hjust = 0.5))
 
-plot %>% ggsave(filename = paste('map_mean_diff_last1000_2', 'png', sep = '.'), plot = ., path = 'Plots', 
+plot %>% ggsave(filename = paste('map_mean_diff_last1000_3', 'png', sep = '.'), plot = ., path = 'Plots', 
                 width = 15, height = 10, units = 'cm', dpi = 'print')
 
 png(file = "Plots/Hist_mean_diff_last1000.png", width = 400, height = 400)
-hist(MEAN_MAP$value, breaks = 8, xlab = "Difference in d18O (simulation - record)", main = "Histogramm mean difference in d18O level")
+hist(MEAN_MAP$value, 
+     breaks = 9,
+     border = "black", 
+     prob = TRUE,
+     xlab = TeX("Diff in $\\delta^{18}O$ level (sim. - record)"),
+     main = "")
+lines(density(MEAN_MAP$value, na.rm = T),
+      lwd = 2, 
+      col = "black")
 dev.off()
+
+# hist(beaver1$temp, # histogram
+#      col="peachpuff", # column color
+#      border="black",
+#      prob = TRUE, # show densities instead of frequencies
+#      xlab = "temp",
+#      main = "Beaver #1")
+# lines(density(beaver1$temp), # density plot
+#       lwd = 2, # thickness of line
+#       col = "chocolate3"
 
 #MAP 2: VAR DIFFERENCE###########################
 
