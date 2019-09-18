@@ -27,9 +27,11 @@ GLOBAL_FONT_FAMILY <- 'sans'
 GLOBAL_POINT_SIZE <- 3
 GLOBAL_ARROW_SIZE <- 0.03
 GLOBAL_FIELD_SIZE <- 0.2
+GLOBAL_FIELD_ALPHA <-0.6
 GLOBAL_BATHYMETRY_COLORS <- c('#d9ebf9', '#cae1f4', '#afd3ef', '#aacde9', '#96c1e3', '#83b9df', '#6fadd6', '#5ba2d0', '#589cc9', '#337fb2', '#2a77ac', '#2371a6')
 GLOBAL_LAND_COLOR <- '#f0e6c2'
 GLOBAL_OCEAN_COLOR <- '#aacde9'
+
 
 # helpers
 title_and_axis <- function(){
@@ -437,14 +439,14 @@ STACYmap <- function(gridlyr = NULL,
                  mapping = aes(x=long, y= lat, angle = angle, radius = scales::rescale(radius, c(1e4, 8e5))),
                  arrow = arrow(length = unit(GLOBAL_ARROW_SIZE, 'inches')),
                  size = GLOBAL_FIELD_SIZE,
-                 alpha = 0.6)
+                 alpha = GLOBAL_FIELD_ALPHA)
   } else if(!is.null(fldlyr)){
     map_plot <- map_plot +
       geom_spoke(data = fldlyr,
                  mapping = aes(x=long, y= lat, angle = angle, radius = 100000),
                  arrow = arrow(length = unit(GLOBAL_ARROW_SIZE, 'inches')),
                  size = GLOBAL_FIELD_SIZE,
-                 alpha = 0.6)
+                 alpha = GLOBAL_FIELD_ALPHA)
     
   }
   

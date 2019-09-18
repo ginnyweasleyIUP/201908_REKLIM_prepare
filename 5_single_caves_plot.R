@@ -53,7 +53,7 @@ plot %>% ggsave(filename = paste('map_sisal_examplecaves', 'png', sep = '.'), pl
 s286 <- sample_tb %>% filter(entity_id == 286) #--> site_id 136 Mexiko: 17.4	-99.2
 s305 <- sample_tb %>% filter(entity_id == 305) #--> site_id 141 Türkei: 41.42	31.93
 
-time_caves=seq(from = -49, to = 1100, by = 1)
+time_caves=seq(from = 1100, to = -49, by = -1)
 
 outdir = "/home/ginnyweasley/Dokumente/01_Promotion/07_R_Code/201908_SA_Poster/Plots/Single_Cave/"
 
@@ -157,24 +157,26 @@ png(file = paste(outdir,"s136-e286-s141-e305_d18O.png",sep=""), width = 24, heig
 par(mfrow=c(1,2), mai = c(.6, 0.9, 0.5, 0.5), mar=c(3, 3,3,0.1))
 plot(time_caves, movavg(CAVES$yearly_data$isot[[136]],10),
      type = "l", 
-     ylim = c(-9, -5), 
+     ylim = c(-9, -5),
+     xlim = c(-49,1020),
      lwd = 2, 
      xlab = "",
      ylab = "",
      main = "d18O of site 136 in Mexico")
 mtext("Time (years BP)", side = 1, line = 2)
 mtext("d18O in (\u2030)", side= 2, line = 2)
-lines(s286$interp_age, movavg(s286$d18O_measurement,10), xlim=c(-49,1100), type = "l", col = "#B2182B", lwd = 2)
+lines(s286$interp_age, movavg(s286$d18O_measurement,10), xlim = c(-49,1020), type = "l", col = "#B2182B", lwd = 2)
 plot(time_caves, movavg(CAVES$yearly_data$isot[[141]],10), 
      type = "l",
-     ylim = c(-9, -5), 
+     ylim = c(-9, -5),
+     xlim = c(-49,1020),
      lwd = 2, 
      xlab = "",
      ylab = "",
      main = "d18O of site 141 in Turkey")
 mtext("Time (years BP)", side = 1, line = 2)
 lines(s305$interp_age, movavg(s305$d18O_measurement,5), 
-      xlim=c(-49,1100), 
+      xlim = c(-49,1020), 
       type = "l", 
       col = "#B2182B", lwd =2)
 legend("topright", legend = c("prec-d18O (HadCM3 simulated)", "Calcite d18O measured"), col = c("black", "#B2182B"), lty = c(1,1), lwd = c(2,2))
@@ -184,13 +186,15 @@ dev.off()
 # TEMP + PREC
 
 png(file = paste(outdir,"s136-e286-s141-e305_temp-prec.png",sep=""), width = 24, height = 10.5, units = "cm", res = 300)
-par(mfrow=c(1,2), mai = c(0.6,0.6,0.5,0.6))
+#par(mfrow=c(1,2), mai = c(0.6,0.6,0.5,0.6))
+par(mfrow=c(1,2), mai = c(.6, 0, 0.5, 0), mar=c(3, 2,3,2))
 plot(time_caves, movavg(CAVES$yearly_data$temp[[136]],30),
      type = "l", 
      lwd = 2.5,
      xlab = "",
      ylab = "T",
      ylim = c(11, 28),
+     xlim = c(-49,1020),
      col = "#B2182B",
      main = "Local T and P at site 136 in Mexico")
 par(new = TRUE)
@@ -201,6 +205,7 @@ plot(time_caves, movavg(CAVES$yearly_data$prec[[136]],30),
      yaxt = "n",
      ylab = "",
      ylim = c(2.3e-5, 3.7e-5),
+     xlim = c(-49,1020),
      xlab = "", 
      col = "#2166AC")#, 
 #axis(side = 4)
@@ -213,6 +218,7 @@ plot(time_caves, movavg(CAVES$yearly_data$temp[[141]],30),
      xlab = "",
      ylab = "",
      ylim = c(11,28),
+     xlim = c(-49,1020),
      col = "#B2182B",
      main = "Local T and P at site 141 in Turkey")
 par(new = TRUE)
@@ -223,6 +229,7 @@ plot(time_caves, movavg(CAVES$yearly_data$prec[[141]],30),
      yaxt = "n",
      ylab = "",
      ylim = c(2.3e-5, 3.7e-5),
+     xlim = c(-49,1020),
      xlab = "", 
      col = "#2166AC")#, 
 #lty = 2)
@@ -230,5 +237,5 @@ axis(side = 4)
 mtext("P", side = 4, line = 2)
 #mtext("T", side = 2, line = 2)
 mtext("Time (years BP)", side = 1, line = 2)
-legend("topright", legend = c("Temp", "Prec"), col = c("#B2182B", "#2166AC"), lty = c(1,1), lwd = c(2,2))
+legend("topright", legend = c("T", "P"), col = c("#B2182B", "#2166AC"), lty = c(1,1), lwd = c(2,2))
 dev.off()

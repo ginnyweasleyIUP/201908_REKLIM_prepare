@@ -114,7 +114,8 @@ plot <- STACYmap(ptlyr = VAR_MAP,
                  colorscheme = RColorBrewer::brewer.pal(9, 'YlOrRd')[1:9],
                  legend_names = list(pt = "Ratio in Var. Sim/Record"))+
   ggtitle("Diff in var of d18O btw simulated P and measured calcite in cave")+
-  theme(plot.title = element_text(hjust = 0.5))
+  theme(plot.title = element_text(hjust = 0.5),
+        axis.text = element_blank())
 
 plot %>% ggsave(filename = paste('map_var_diff_last1000_2', 'png', sep = '.'), plot = ., path = 'Plots', 
                 width = 15, height = 10, units = 'cm', dpi = 'print')
