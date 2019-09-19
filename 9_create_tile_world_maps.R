@@ -120,6 +120,70 @@ plotting_temp_mask <- SIM_DATA_past1000$GLOBAL_DATA_MEAN$GLOBAL_DATA_TEMP_MEAN
 plotting_temp_mask[plotting_temp_mask> -38] <- 1
 plotting_temp_mask[plotting_temp_mask< -38] <- NA
 
+## Create Seasonal Data?!?
+
+SIM_DATA_past1000_seasonal <- list(
+  WINTER_world = list(
+    temp = array(dim = c(96,73,1150)),
+    prec = array(dim = c(96,73,1150)),
+    isot = array(dim = c(96,73,1150))
+  ),
+  SPRING_world = list(
+    temp = array(dim = c(96,73,1150)),
+    prec = array(dim = c(96,73,1150)),
+    isot = array(dim = c(96,73,1150))
+  ),
+  SUMMER_world = list(
+    temp = array(dim = c(96,73,1150)),
+    prec = array(dim = c(96,73,1150)),
+    isot = array(dim = c(96,73,1150))
+  ),
+  AUTUMN_world = list(
+    temp = array(dim = c(96,73,1150)),
+    prec = array(dim = c(96,73,1150)),
+    isot = array(dim = c(96,73,1150))
+  )
+)
+
+winter_mask = c(1,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA)
+spring_mask = c(NA,NA,NA,1,1,1,NA,NA,NA,NA,NA,NA)
+summer_mask = c(NA,NA,NA,NA,NA,NA,1,1,1,NA,NA,NA)
+autumn_mask = c(NA,NA,NA,NA,NA,NA,NA,NA,NA,1,1,1)
+
+for (lon in 1:96){ #--> nachgeschaute Dimensionen...!
+  for (lat in 1:73){
+    
+    print(paste0(lon, " ", lat))
+    
+    for (ii in 1:1150){
+      
+      
+      
+      pos_start = 12*(ii-1)+1
+      pos_stop  = 12*(ii-1)+12
+      
+      SIM_DATA_past1000_seasonal$WINTER_world$temp[lon,lat,ii] = mean(temp_raw[lon,lat,pos_start:pos_stop]*winter_mask, na.rm = TRUE)
+      SIM_DATA_past1000_seasonal$WINTER_world$prec[lon,lat,ii] = mean(prec_raw[lon,lat,pos_start:pos_stop]*winter_mask, na.rm = TRUE)
+      SIM_DATA_past1000_seasonal$WINTER_world$isot[lon,lat,ii] = mean(isot_raw[lon,lat,pos_start:pos_stop]*winter_mask, na.rm = TRUE)
+      
+      SIM_DATA_past1000_seasonal$SPRING_world$temp[lon,lat,ii] = mean(temp_raw[lon,lat,pos_start:pos_stop]*spring_mask, na.rm = TRUE)
+      SIM_DATA_past1000_seasonal$SPRING_world$prec[lon,lat,ii] = mean(prec_raw[lon,lat,pos_start:pos_stop]*spring_mask, na.rm = TRUE)
+      SIM_DATA_past1000_seasonal$SPRING_world$isot[lon,lat,ii] = mean(isot_raw[lon,lat,pos_start:pos_stop]*spring_mask, na.rm = TRUE)
+      
+      SIM_DATA_past1000_seasonal$SUMMER_world$temp[lon,lat,ii] = mean(temp_raw[lon,lat,pos_start:pos_stop]*summer_mask, na.rm = TRUE)
+      SIM_DATA_past1000_seasonal$SUMMER_world$prec[lon,lat,ii] = mean(prec_raw[lon,lat,pos_start:pos_stop]*summer_mask, na.rm = TRUE)
+      SIM_DATA_past1000_seasonal$SUMMER_world$isot[lon,lat,ii] = mean(isot_raw[lon,lat,pos_start:pos_stop]*summer_mask, na.rm = TRUE)
+      
+      SIM_DATA_past1000_seasonal$AUTUMN_world$temp[lon,lat,ii] = mean(temp_raw[lon,lat,pos_start:pos_stop]*autumn_mask, na.rm = TRUE)
+      SIM_DATA_past1000_seasonal$AUTUMN_world$prec[lon,lat,ii] = mean(prec_raw[lon,lat,pos_start:pos_stop]*autumn_mask, na.rm = TRUE)
+      SIM_DATA_past1000_seasonal$AUTUMN_world$isot[lon,lat,ii] = mean(isot_raw[lon,lat,pos_start:pos_stop]*autumn_mask, na.rm = TRUE)
+      remove(pos_start, pos_stop)
+    }
+  }
+}
+
+remove(winter_mask, summer_mask, autumn_mask, spring_mask)
+
 
 #################################################
 ##CALCULATE CORRELATIONS ########################

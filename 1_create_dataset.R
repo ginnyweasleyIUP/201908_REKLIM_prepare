@@ -148,3 +148,67 @@ remove(yearly_time_start, yearly_temp_mean, yearly_prec_mean, yearly_isot_mean)
 remove(ii)
 remove(jj)
 
+#################################################
+## Create Seasonal Data #########################
+#################################################
+
+CAVES_SEASONAL <-  vector(mode = "list")
+
+winter_mask = c(1,1,1,NA,NA,NA,NA,NA,NA,NA,NA,NA)
+spring_mask = c(NA,NA,NA,1,1,1,NA,NA,NA,NA,NA,NA)
+summer_mask = c(NA,NA,NA,NA,NA,NA,1,1,1,NA,NA,NA)
+autumn_mask = c(NA,NA,NA,NA,NA,NA,NA,NA,NA,1,1,1)
+
+for (ii in 1:dim(sisal_data)[1]){
+  
+  name = paste0("SITE", ii)
+  
+  print(name)
+  
+  CAVES_SEASONAL[[name]] <- list(
+    SUMMER <- list(temp_mean = numeric(1150),
+                   prec_mean = numeric(1150),
+                   isot_mean = numeric(1150),
+                   time_strt = numeric(1150)),
+    AUTUMN <- list(temp_mean = numeric(1150),
+                   prec_mean = numeric(1150),
+                   isot_mean = numeric(1150),
+                   time_strt = numeric(1150)),
+    WINTER <- list(temp_mean = numeric(1150),
+                   prec_mean = numeric(1150),
+                   isot_mean = numeric(1150),
+                   time_strt = numeric(1150)),
+    SPRING <- list(temp_mean = numeric(1150),
+                   prec_mean = numeric(1150),
+                   isot_mean = numeric(1150),
+                   time_strt = numeric(1150))
+    
+  )
+  
+
+  for(jj in 1:1150){
+    
+    print(jj)
+    
+    pos_start = 12*(jj-1)+1
+    pos_stop  = 12*(jj-1)+12
+    CAVES_SEASONAL[[name]]$SUMMER$temp_mean[jj] <- mean(CAVES$raw_data$temp[[ii]][pos_start:pos_stop]*summer_mask, na.rm = T)
+    CAVES_SEASONAL[[name]]$SUMMER$prec_mean[jj] <- mean(CAVES$raw_data$prec[[ii]][pos_start:pos_stop]*summer_mask, na.rm = T)
+    CAVES_SEASONAL[[name]]$SUMMER$isot_mean[jj] <- mean(CAVES$raw_data$isot[[ii]][pos_start:pos_stop]*summer_mask, na.rm = T)
+    CAVES_SEASONAL[[name]]$SUMMER$time_strt[jj] <- mean(CAVES$raw_data$time[[ii]][pos_start]+6)
+    CAVES_SEASONAL[[name]]$AUTUMN$temp_mean[jj] <- mean(CAVES$raw_data$temp[[ii]][pos_start:pos_stop]*autumn_mask, na.rm = T)
+    CAVES_SEASONAL[[name]]$AUTUMN$prec_mean[jj] <- mean(CAVES$raw_data$prec[[ii]][pos_start:pos_stop]*autumn_mask, na.rm = T)
+    CAVES_SEASONAL[[name]]$AUTUMN$isot_mean[jj] <- mean(CAVES$raw_data$isot[[ii]][pos_start:pos_stop]*autumn_mask, na.rm = T)
+    CAVES_SEASONAL[[name]]$AUTUMN$time_strt[jj] <- mean(CAVES$raw_data$time[[ii]][pos_start]+9)
+    CAVES_SEASONAL[[name]]$WINTER$temp_mean[jj] <- mean(CAVES$raw_data$temp[[ii]][pos_start:pos_stop]*winter_mask, na.rm = T)
+    CAVES_SEASONAL[[name]]$WINTER$prec_mean[jj] <- mean(CAVES$raw_data$prec[[ii]][pos_start:pos_stop]*winter_mask, na.rm = T)
+    CAVES_SEASONAL[[name]]$WINTER$isot_mean[jj] <- mean(CAVES$raw_data$isot[[ii]][pos_start:pos_stop]*winter_mask, na.rm = T)
+    CAVES_SEASONAL[[name]]$WINTER$time_strt[jj] <- mean(CAVES$raw_data$time[[ii]][pos_start])
+    CAVES_SEASONAL[[name]]$SPRING$temp_mean[jj] <- mean(CAVES$raw_data$temp[[ii]][pos_start:pos_stop]*spring_mask, na.rm = T)
+    CAVES_SEASONAL[[name]]$SPRING$prec_mean[jj] <- mean(CAVES$raw_data$prec[[ii]][pos_start:pos_stop]*spring_mask, na.rm = T)
+    CAVES_SEASONAL[[name]]$SPRING$isot_mean[jj] <- mean(CAVES$raw_data$isot[[ii]][pos_start:pos_stop]*spring_mask, na.rm = T)
+    CAVES_SEASONAL[[name]]$SPRING$time_strt[jj] <- mean(CAVES$raw_data$time[[ii]][pos_start]+3)
+
+  }
+}
+

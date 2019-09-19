@@ -65,7 +65,7 @@ MEAN_MAP <- data_frame(
   lat = CAVES$site_info$latitude[sites_entities_used$site_id],
   value = DATA_last1000$diff_mean
 )
-
+#gridlyr = SIM_DATA_past1000$GLOBAL_DATA_MEAN$GLOBAL_DATA_TEMP_MEAN,
 plot <- STACYmap(ptlyr = MEAN_MAP, 
                  zoom = c(-180,-60,180,73), 
                  legend_names = list(pt = TeX("Mean diff. in $\\delta ^{18}O$ level")))+ 
