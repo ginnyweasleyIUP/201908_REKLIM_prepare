@@ -152,7 +152,7 @@ GLOBAL_FONT_SIZE <- 8
 
 
 
-for (ii in sites_used_short[1]){
+for (ii in sites_used){
 
   lon_raw <- CAVES$site_info$longitude[ii]
   if(lon_raw<0){
@@ -188,7 +188,7 @@ for (ii in sites_used_short[1]){
   CORR_DATA_PI_P_Autumn = array(dim = c(96,73))
   
   for (lon in 1:96){
-    print(paste0("  lon: ", lon))
+    #print(paste0("  lon: ", lon))
     for (lat in 1:73){
         
       if(TRUE){
@@ -411,7 +411,7 @@ for (ii in sites_used_short[1]){
                     plot_ti_summer, plot_pi_summer, 
                     plot_ti_autumn, plot_pi_autumn,
                     ncol = 2, nrow = 4) %>%
-    ggsave(file="a4_output.pdf", width = 210, height = 297, units = "mm")
+    ggsave(file=paste0("Plots/A4_Field_Plots/Plots_site",ii,".png"), width = 210, height = 297, units = "mm")
 
   remove(plot_ti_winter, plot_pi_winter,
          plot_ti_spring, plot_pi_spring,
